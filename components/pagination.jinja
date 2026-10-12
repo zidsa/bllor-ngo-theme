@@ -1,0 +1,33 @@
+{# Page links for a paginated list. Expects `items` (a paginated response). #}
+{% set total_pages = items.pages_count | default(1) %}
+{% set current = items.page | default(1) %}
+{% if total_pages > 1 %}
+    {% macro page_href(n) %}{{ session.url.include_query_params(page=n) }}{% endmacro %}
+    {% set start = [current - 2, 1] | max %}
+    {% set end = [current + 2, total_pages] | min %}
+    <nav class="d-flex justify-content-end mt-4" aria-label="{{ _('Pagination') }}">
+        <ul class="pagination gap-2">
+            <li class="page-item {{ 'disabled' if current == 1 }}">
+                <a class="page-link" href="{{ page_href(current - 1) if current > 1 else '#' }}">{{ _('Prev') }}</a>
+            </li>
+            {% if current > 3 and total_pages > 5 %}
+                <li class="page-item"><a class="page-link" href="{{ page_href(1) }}">1</a></li>
+                <li class="disabled page-item"><a class="page-link">...</a></li>
+            {% endif %}
+            {% for n in range(start, end + 1) %}
+                <li class="page-item {{ 'page-item-n-last' if total_pages > 5 and (n - current == 2 or current - n == 2) }}">
+                    <a class="page-link {{ 'active' if n == current }}" {% if n != current %}href="{{ page_href(n) }}"{% endif %}>{{ n }}</a>
+                </li>
+            {% endfor %}
+            {% if current < total_pages - 3 and total_pages > 5 %}
+                <li class="disabled page-item"><a class="page-link">...</a></li>
+            {% endif %}
+            {% if current < total_pages - 2 and total_pages > 5 %}
+                <li class="page-item"><a class="page-link" href="{{ page_href(total_pages) }}">{{ total_pages }}</a></li>
+            {% endif %}
+            <li class="page-item {{ 'disabled' if current == total_pages }}">
+                <a class="page-link" href="{{ page_href(current + 1) if current < total_pages else '#' }}">{{ _('Next') }}</a>
+            </li>
+        </ul>
+    </nav>
+{% endif %}

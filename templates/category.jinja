@@ -1,0 +1,32 @@
+{% extends "layout.jinja" %}
+
+{% block content %}
+    {% set crumbs = [] %}
+    {% set grandparent = safeget(category, 'parent_category.parent_category') %}
+    {% if grandparent %}
+        {% set crumbs = crumbs + [{'name': grandparent.name, 'url': url_for('category_details', category_id=grandparent.id, slug=grandparent.slug)}] %}
+    {% endif %}
+    {% if category.parent_category %}
+        {% set crumbs = crumbs + [{'name': category.parent_category.name, 'url': url_for('category_details', category_id=category.parent_category.id, slug=category.parent_category.slug)}] %}
+    {% endif %}
+    <div class="container">
+        <div class="page-content">
+            {% with title = category.name %}
+                {% include 'components/breadcrumb.jinja' %}
+            {% endwith %}
+        </div>
+    </div>
+    {% if category.cover_image %}
+        <div class="category-cover"><img src="{{ category.cover_image }}" alt="{{ category.name | e }}"></div>
+    {% endif %}
+    {% if category.sub_categories %}
+        <ul class="list-home-tabs nav gap-3 justify-content-center my-4">
+            {% for sub in category.sub_categories %}
+                <li><a href="{{ url_for('category_details', category_id=sub.id, slug=sub.slug) }}">{{ sub.name | e }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% with items = products %}
+        {% include 'components/products/donation-grid.jinja' %}
+    {% endwith %}
+{% endblock %}

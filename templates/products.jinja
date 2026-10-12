@@ -1,0 +1,15 @@
+{% extends "layout.jinja" %}
+
+{% block content %}
+    {% set query = session.query_params.get('q') %}
+    <div class="container">
+        <div class="page-content">
+            {% with title = (_('Search results for "%s"') | format(query)) if query else _('All donation opportunities'), crumbs = [] %}
+                {% include 'components/breadcrumb.jinja' %}
+            {% endwith %}
+        </div>
+    </div>
+    {% with items = products %}
+        {% include 'components/products/donation-grid.jinja' %}
+    {% endwith %}
+{% endblock %}

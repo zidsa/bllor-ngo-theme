@@ -1,0 +1,50 @@
+{% extends "layout.jinja" %}
+
+{# Each category shows its first opportunities. They are loaded from the category page
+   itself, so the cards come from the same template as everywhere else. #}
+{% block content %}
+    <div class="container">
+        <div class="page-content">
+            {% with title = _('All categories'), crumbs = [] %}
+                {% include 'components/breadcrumb.jinja' %}
+            {% endwith %}
+        </div>
+    </div>
+    <div class="container">
+        {% for category in categories %}
+            {% set category_url = url_for('category_details', category_id=category.id, slug=category.slug) %}
+            <div class="mb-4 d-none" data-category-block="{{ category_url }}">
+                <a href="{{ category_url }}" class="block-category d-flex align-items-center justify-content-center" {% if category.cover_image %}style="background-image: url('{{ category.cover_image }}')"{% endif %}>
+                    <span>{{ category.name | e }}</span>
+                </a>
+                <div class="mt-3 category-product category-item" data-category-cards></div>
+                <div class="mt-3 text-center">
+                    <a href="{{ category_url }}" class="btn btn-outline-primary">{{ _('More') }}</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block footer_scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("[data-category-block]").forEach(function (block) {
+            fetch(block.getAttribute("data-category-block"), { credentials: "same-origin" })
+                .then(function (response) { return response.text(); })
+                .then(function (html) {
+                    var page = new DOMParser().parseFromString(html, "text/html");
+                    var cards = Array.prototype.slice.call(page.querySelectorAll("[data-category-products] .row > .col-lg-4"), 0, 6);
+                    if (!cards.length) return;
+                    var row = document.createElement("div");
+                    row.className = "row";
+                    cards.forEach(function (card) { row.appendChild(document.importNode(card, true)); });
+                    block.querySelector("[data-category-cards]").appendChild(row);
+                    block.classList.remove("d-none");
+                    if (window.bllorInitDonationWindows) window.bllorInitDonationWindows(block);
+                })
+                .catch(function () {});
+        });
+    });
+</script>
+{% endblock %}

@@ -38,8 +38,10 @@
       });
     }
 
-    initDonationWindows();
+    initDonationWindows(document);
   });
+
+  window.bllorInitDonationWindows = initDonationWindows;
 
   $(document).on("mouseup", function (e) {
     var form = $(".block-search-form");
@@ -95,10 +97,10 @@
     return Math.floor((later - earlier) / (1000 * 3600 * 24));
   }
 
-  function initDonationWindows() {
+  function initDonationWindows(root) {
     var lang = $("html").attr("lang");
     var now = new Date();
-    $("[data-donation-window]").each(function () {
+    $(root || document).find("[data-donation-window]").each(function () {
       var label = $(this);
       var start = label.attr("data-start") ? new Date(label.attr("data-start")) : null;
       var end = label.attr("data-end") ? new Date(label.attr("data-end")) : null;

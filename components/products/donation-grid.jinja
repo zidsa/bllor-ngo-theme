@@ -1,0 +1,13 @@
+{# Grid of donation cards with pagination. Expects `items` (paginated products). #}
+<div class="container" data-category-products>
+    <div class="row">
+        {% for product in items.results %}
+            <div class="col-lg-4 col-md-6 mb-3">
+                {% include 'components/products/donation-card.jinja' %}
+            </div>
+        {% else %}
+            <p class="text-center my-5">{{ _('No donation opportunities found') }}</p>
+        {% endfor %}
+    </div>
+    {% include 'components/pagination.jinja' %}
+</div>
