@@ -1,0 +1,169 @@
+{% set contact = safeget(store, 'settings.contact', {}) or {} %}
+{% set general = safeget(store, 'settings.general', {}) or {} %}
+{% set address = safeget(store, 'settings.general.business_address', {}) or {} %}
+{% set tax = safeget(store, 'settings.general.tax_settings', {}) or {} %}
+{% set apps = safeget(store, 'settings.general.one_signal', {}) or {} %}
+{% set payment_methods = safeget(store, 'settings.checkout.payment_methods', []) or [] %}
+{% set map_url = 'https://maps.google.com/?q=' ~ address.latitude ~ ',' ~ address.longitude if address.latitude else '' %}
+
+{% macro address_line() %}
+    <i class="fa-solid fa-location-dot fa-fw"></i>
+    <span>
+        {{ address.street | e }}<br/>
+        {{ safeget(address, 'city.country.name', '') }}, {{ safeget(address, 'city.name', '') }}, {{ address.district | e }}, {{ address.street | e }}
+    </span>
+{% endmacro %}
+
+{% macro contact_lines() %}
+    {% if contact.phone %}
+        <li><a href="tel:{{ contact.phone }}" target="_blank"><i class="fa-solid fa-phone fa-fw"></i><span dir="ltr">{{ contact.phone }}</span></a></li>
+    {% endif %}
+    {% if contact.email %}
+        <li><a href="mailto:{{ contact.email }}" target="_blank"><i class="fa-solid fa-envelope fa-fw"></i><span>{{ contact.email }}</span></a></li>
+    {% endif %}
+{% endmacro %}
+
+<div>
+  <footer class="footer">
+    <div class="container py-3 px-2 px-md-4">
+      <div class="row align-items-center">
+        <div class="col-md-3">
+          <h3 class="footer-title">{{ settings.about_us_title | default('', true) | e }}</h3>
+          <p>{{ settings.about_us_des | default('', true) | e }}</p>
+          <div class="social-media d-flex gap-3 mt-3">
+            {% if contact.facebook %}
+              <a href="https://www.facebook.com/{{ contact.facebook }}" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            {% endif %}
+            {% if contact.instagram %}
+              <a href="https://www.instagram.com/{{ contact.instagram }}" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            {% endif %}
+            {% if contact.twitter %}
+              <a href="https://twitter.com/{{ contact.twitter }}" target="_blank" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+            {% endif %}
+            {% if contact.snapchat %}
+              <a href="https://www.snapchat.com/add/{{ contact.snapchat }}" target="_blank" aria-label="Snapchat"><i class="fa-brands fa-snapchat-ghost"></i></a>
+            {% endif %}
+            {% if contact.tiktok %}
+              <a href="https://www.tiktok.com/@{{ contact.tiktok }}" target="_blank" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+            {% endif %}
+            {% if contact.website %}
+              <a href="{{ contact.website }}" target="_blank" aria-label="{{ _('Website') }}"><i class="fa-solid fa-earth-asia"></i></a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-3 mt-4 mt-md-0">
+          {% if not settings.links_1_hide %}
+            <h3 class="footer-title">{{ settings.links_1_title | default('', true) | e }}</h3>
+            <ul class="footer-menu">
+              {% for item in settings.links_1_links | default([], true) %}
+                <li><a href="{{ item.url }}">{{ item.title | e }}</a></li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+        {% if apps.ios_app_id or apps.android_package_name %}
+          <div class="col-md-3 order-md-4 order-md-last mt-4 mt-md-0">
+            <div class="d-flex flex-wrap justify-content-center justify-content-md-end gap-2">
+              {% if apps.ios_app_id %}
+                <a target="_blank" href="https://apps.apple.com/app/id{{ apps.ios_app_id }}"><img src="{{ 'appstore.svg' | asset_url }}" alt="App Store"></a>
+              {% endif %}
+              {% if apps.android_package_name %}
+                <a target="_blank" href="https://play.google.com/store/apps/details?id={{ apps.android_package_name }}"><img src="{{ 'googlestore.svg' | asset_url }}" alt="Google Play"></a>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+        <div class="col-md-3 mt-4 mt-md-0 order-3">
+          {% if address.show_location %}
+            <h3 class="footer-title">{{ _('Our location') }}</h3>
+            <ul class="footer-menu mb-3">
+              <li><a {% if map_url %}target="_blank" href="{{ map_url }}"{% endif %}>{{ address_line() }}</a></li>
+              {{ contact_lines() }}
+            </ul>
+          {% elif contact.phone or contact.email %}
+            <h3 class="footer-title">{{ _('Contact us') }}</h3>
+            <ul class="footer-menu mb-3">
+              {{ contact_lines() }}
+            </ul>
+          {% endif %}
+
+          {% if payment_methods %}
+            <h3 class="footer-title">{{ _('Payment options') }}</h3>
+            <div class="footer-menu d-flex gap-2 flex-wrap payment-method-list align-items-center">
+              {% for method in payment_methods %}
+                <a href="{{ url_for('shipping_payment') }}">
+                  <img src="{{ image_url(method.icon, h=80, q=85) | trim }}" class="img-py-footer" loading="lazy" alt="{{ method.name | e }}">
+                </a>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </footer>
+  <div class="copyrights">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          {% set vat_number = settings.certificates_vat_number or tax.tax_number %}
+          {% set vat_image = settings.certificates_vat_image %}
+          {% set cr_number = settings.certificates_cr_number or general.commercial_registration_number %}
+          {% set cr_image = settings.certificates_cr_image %}
+          <div class="certificates d-flex flex-wrap justify-content-center justify-content-md-start gap-3">
+            {% if vat_image or tax.is_certificate_visible or vat_number %}
+              <div class="maroof-icon">
+                {% if vat_image %}
+                  <div class="vat-icon">
+                    <img loading="lazy" class="lazy-img" src="{{ image_url(vat_image, h=80, q=85) | trim }}" alt="{{ _('VAT certificate') }}" width="32" height="40">
+                  </div>
+                {% elif tax.is_certificate_visible %}
+                  <div class="vat-icon">
+                    <a {% if tax.tax_registration_certificate %}href="{{ tax.tax_registration_certificate }}" target="_blank"{% endif %} aria-label="{{ _('VAT certificate') }}">
+                      <img loading="lazy" class="lazy-img" src="{{ 'vat-certificate.svg' | asset_url }}" alt="{{ _('VAT certificate') }}" width="32" height="40">
+                    </a>
+                  </div>
+                {% endif %}
+                {% if vat_number %}
+                  <div class="text-certificate">
+                    <p>{{ _('VAT number:') }}</p>
+                    <span>{{ vat_number | e }}</span>
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+
+            {% if contact.business_center %}
+              <a href="https://eauthenticate.saudibusiness.gov.sa/certificate-details/{{ contact.business_center }}" class="maroof-icon" target="_blank">
+                <img loading="lazy" class="lazy-img" src="{{ 'business_center.png' | asset_url }}" alt="" width="32" height="40">
+                <div class="text-certificate">
+                  <p>{{ _('Saudi Business Center') }}</p>
+                  <span>{{ contact.business_center }}</span>
+                </div>
+              </a>
+            {% endif %}
+
+            {% if cr_image or cr_number %}
+              <div class="maroof-icon">
+                {% if cr_image %}
+                  <img loading="lazy" class="lazy-img" src="{{ image_url(cr_image, h=80, q=85) | trim }}" alt="" width="32" height="40">
+                {% endif %}
+                {% if cr_number %}
+                  <div class="text-certificate">
+                    <p>{{ _('Commercial registration number:') }}</p>
+                    <span>{{ cr_number | e }}</span>
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-6 mt-4 mt-md-0">
+          <div class="d-flex justify-content-center justify-content-md-end">
+            <p>{{ safeget(store, 'settings.branding.copyrights', '') | safe }}</p>
+            <img src="{{ 'copyrights.png' | asset_url }}" style="width:69px;height:auto;" class="ms-2" alt="" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
