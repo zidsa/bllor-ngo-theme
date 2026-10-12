@@ -1,0 +1,10 @@
+{% extends "layout.jinja" %}
+
+{% block content %}
+    <div class="container">
+        <div class="page-content">
+            <h1 class="single-title">{{ page.title | e }}</h1>
+            <div class="p-3">{{ page.content | safe }}</div>
+        </div>
+    </div>
+{% endblock %}

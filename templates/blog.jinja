@@ -1,0 +1,13 @@
+{% extends "layout.jinja" %}
+
+{% block content %}
+    <section class="blog mt-5 mb-5">
+        <div class="container">
+            <div class="blog-title mt-5 mb-5"><h1>{{ blog.title | e }}</h1></div>
+            {% if safeget(blog, 'cover.image.large') %}
+                <img class="img-fluid mb-4" src="{{ blog.cover.image.large }}" alt="{{ blog.title | e }}">
+            {% endif %}
+            <div class="blog-text mt-3 mb-5">{{ blog.content | safe }}</div>
+        </div>
+    </section>
+{% endblock %}

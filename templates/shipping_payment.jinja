@@ -1,0 +1,70 @@
+{% extends "layout.jinja" %}
+
+{% block top_links %}
+    <link rel="stylesheet" href="{{ 'shipping_methods.css' | asset_url }}">
+    <style>
+        .list-home-tabs { list-style: none; }
+        img.img-thumbnail { height: 75px; width: auto; }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <div class="container">
+        {% with title = _('Payment options'), crumbs = [] %}
+            {% include 'components/breadcrumb.jinja' %}
+        {% endwith %}
+        <ul class="list-home-tabs mb-5 d-flex gap-2 justify-content-center" role="tablist">
+            <li role="presentation">
+                <button class="active" id="tab-py" data-bs-toggle="tab" data-bs-target="#tab-py-pane" type="button" role="tab" aria-controls="tab-py-pane" aria-selected="true">{{ _('Payment options') }}</button>
+            </li>
+            {% if banks %}
+                <li role="presentation">
+                    <button id="tab-ac" data-bs-toggle="tab" data-bs-target="#tab-ac-pane" type="button" role="tab" aria-controls="tab-ac-pane" aria-selected="false">{{ _('Bank accounts') }}</button>
+                </li>
+            {% endif %}
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="tab-py-pane" role="tabpanel" aria-labelledby="tab-py" tabindex="0">
+                <h3 class="py-title">{{ _('Payment options') }}</h3>
+                <div class="d-flex flex-row flex-wrap justify-content-center gap-2 align-items-center">
+                    {% for method in payment_methods %}
+                        {% if method.icon %}
+                            <div class="d-flex align-items-center justify-content-center payment-method-card">
+                                <img class="img-thumbnail" src="{{ method.icon }}" alt="{{ method.name | e }}">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% if banks %}
+                <div class="tab-pane fade" id="tab-ac-pane" role="tabpanel" aria-labelledby="tab-ac" tabindex="0">
+                    <div class="row">
+                        <h3 class="py-title">{{ _('Bank accounts') }}</h3>
+                        {% for bank in banks %}
+                            <div class="row mb-3">
+                                <div class="block-item-shp">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="bank-image"><img src="{{ safeget(bank, 'bank.logo', '') }}" class="w-100" alt="{{ safeget(bank, 'bank.name', '') | e }}"></div>
+                                        </div>
+                                        <div class="col-8">
+                                            <h3 class="title">{{ safeget(bank, 'bank.name', '') | e }}</h3>
+                                            <p class="label">{{ _('Account name') }}</p>
+                                            <div class="cont">{{ bank.beneficiary_name | e }}</div>
+                                            <p class="label">{{ _('Account number') }}</p>
+                                            <div class="cont" dir="ltr">{{ bank.account_number }}</div>
+                                            <p class="label">{{ _('IBAN') }}</p>
+                                            <div class="cont" dir="ltr">{{ bank.iban }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

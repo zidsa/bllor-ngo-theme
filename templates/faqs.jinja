@@ -1,0 +1,21 @@
+{% extends "layout.jinja" %}
+
+{% block content %}
+    <div class="container">
+        <div class="page-content">
+            <h1 class="single-title">{{ _('Frequently asked questions') }}</h1>
+            <div class="accordion" id="accordion">
+                {% for faq in faqs %}
+                    <div class="accordion-item">
+                        <h3 class="accordion-header" id="faq-heading-{{ loop.index0 }}">
+                            <button class="accordion-button {{ 'collapsed' if not loop.first }}" type="button" data-bs-toggle="collapse" data-bs-target="#faq-{{ loop.index0 }}" aria-expanded="{{ 'true' if loop.first else 'false' }}" aria-controls="faq-{{ loop.index0 }}">{{ faq.question | e }}</button>
+                        </h3>
+                        <div class="accordion-collapse collapse {{ 'show' if loop.first }}" data-bs-parent="#accordion" id="faq-{{ loop.index0 }}" aria-labelledby="faq-heading-{{ loop.index0 }}">
+                            <div class="p-3">{{ faq.answer | safe }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

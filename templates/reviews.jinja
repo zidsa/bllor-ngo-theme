@@ -1,0 +1,36 @@
+{% extends "layout.jinja" %}
+
+{% block content %}
+{% set review_list = safeget(reviews, 'results', reviews) or [] %}
+<div class="container">
+    <div class="page-content">
+        {% with title = _('Reviews'), crumbs = [{'name': product.name, 'url': url_for('product_details', slug=product.slug)}] %}
+            {% include 'components/breadcrumb.jinja' %}
+        {% endwith %}
+        <div class="mb-3 text-end">
+            <a class="btn btn-primary" href="{{ url_for('add_product_review', slug=product.id) }}">{{ _('Add your review') }}</a>
+        </div>
+        {% for review in review_list %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <strong>{{ safeget(review, 'customer.name', '') | e }}</strong>
+                        <span class="text-warning" aria-label="{{ review.rating }}/5">
+                            {% for star in range(5) %}<i class="fa-{{ 'solid' if star < (review.rating or 0) else 'regular' }} fa-star"></i>{% endfor %}
+                        </span>
+                    </div>
+                    {% if review.comment %}<p class="mt-2 mb-0">{{ review.comment | e }}</p>{% endif %}
+                    {% if safeget(review, 'reply.text') %}
+                        <div class="mt-2 p-2 bg-light"><small>{{ review.reply.text | e }}</small></div>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <p class="text-center my-5">{{ _('No reviews yet, add yours') }}</p>
+        {% endfor %}
+        {% if reviews.pages_count is defined %}
+            {% with items = reviews %}{% include 'components/pagination.jinja' %}{% endwith %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

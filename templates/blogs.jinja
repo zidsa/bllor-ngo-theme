@@ -1,0 +1,29 @@
+{% extends "layout.jinja" %}
+
+{# The legacy theme had an empty blog list; this lists the posts with the theme's
+   card styles. #}
+{% block content %}
+    <div class="container">
+        <div class="page-content">
+            {% with title = _('Blog'), crumbs = [] %}
+                {% include 'components/breadcrumb.jinja' %}
+            {% endwith %}
+            <div class="row">
+                {% for blog in safeget(blogs, 'results', []) or [] %}
+                    <div class="col-lg-4 col-md-6 mb-3">
+                        <a class="block-product d-block p-3 h-100" href="{{ url_for('blogs', slug=blog.slug) }}">
+                            {% if safeget(blog, 'cover.image.medium') %}
+                                <img class="img-fluid mb-2" src="{{ blog.cover.image.medium }}" alt="{{ blog.title | e }}" loading="lazy">
+                            {% endif %}
+                            <h3 class="product-title">{{ blog.title | e }}</h3>
+                            {% if blog.snippet %}<p>{{ blog.snippet | e }}</p>{% endif %}
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+            {% with items = blogs %}
+                {% include 'components/pagination.jinja' %}
+            {% endwith %}
+        </div>
+    </div>
+{% endblock %}

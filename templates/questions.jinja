@@ -1,0 +1,28 @@
+{% extends "layout.jinja" %}
+
+{% block content %}
+{% set question_list = safeget(questions, 'results', questions) or [] %}
+<div class="container">
+    <div class="page-content">
+        {% with title = _('Questions'), crumbs = [{'name': product.name, 'url': url_for('product_details', slug=product.slug)}] %}
+            {% include 'components/breadcrumb.jinja' %}
+        {% endwith %}
+        {% for question in question_list %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <strong>{{ question.question | e }}</strong>
+                    <div class="text-muted small">{{ _('Anonymous') if question.is_anonymous else (question.name | e) }}</div>
+                    {% for answer in question.answers or [] %}
+                        <div class="mt-2 p-2 bg-light">{{ answer.answer | e }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <p class="text-center my-5">{{ _('No questions yet') }}</p>
+        {% endfor %}
+        {% if questions.pages_count is defined %}
+            {% with items = questions %}{% include 'components/pagination.jinja' %}{% endwith %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
