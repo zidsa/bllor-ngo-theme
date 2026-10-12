@@ -1,0 +1,237 @@
+# Arabic translations for the bllor-ngo theme.
+# Wording follows the legacy theme's locals/ar.json where it existed.
+msgid ""
+msgstr ""
+"Project-Id-Version: bllor-ngo-theme\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
+
+msgid "Account name"
+msgstr "اسم المحول له"
+
+msgid "Account number"
+msgstr "رقم الحساب"
+
+msgid "Add to cart"
+msgstr "أضف للسلة"
+
+msgid "Add your review"
+msgstr "اضف تقييمك"
+
+msgid "All categories"
+msgstr "جميع التصنيفات"
+
+msgid "All donation opportunities"
+msgstr "جميع فرص التبرع"
+
+msgid "Anonymous"
+msgstr "مجهول"
+
+msgid "Bank accounts"
+msgstr "الحسابات البنكية"
+
+msgid "Blog"
+msgstr "المدونة"
+
+msgid "Browse projects"
+msgstr "تصفح المشاريع الخيرية"
+
+msgid "Cart"
+msgstr "السلة"
+
+msgid "Cart is empty"
+msgstr "السلة فارغة"
+
+msgid "Check out this donation opportunity"
+msgstr "اطَّلع على الفرصة التالية"
+
+msgid "Close"
+msgstr "اغلاق"
+
+msgid "Collected"
+msgstr "تم جمع"
+
+msgid "Commercial registration number:"
+msgstr "رقم السجل التجاري:"
+
+msgid "Complete the donation"
+msgstr "إتمام عملية التبرع"
+
+msgid "Contact us"
+msgstr "تواصل معنا"
+
+msgid "Continue"
+msgstr "متابعة"
+
+msgid "Copy link"
+msgstr "نسخ الرابط"
+
+msgid "Donate now"
+msgstr "تبرع الآن"
+
+msgid "Donation added successfully!"
+msgstr "تمت إضافة التبرع بنجاح!"
+
+msgid "Donation amount"
+msgstr "مبلغ التبرع"
+
+msgid "Donations cart"
+msgstr "سلة التبرعات"
+
+msgid "Edit gift details"
+msgstr "تعديل بيانات الإهداء"
+
+msgid "Frequently asked questions"
+msgstr "الأسئلة الشائعة"
+
+msgid "From"
+msgstr "من"
+
+msgid "Gift message"
+msgstr "رسالة الإهداء"
+
+msgid "Gift the donation"
+msgstr "إهداء التبرع"
+
+msgid "Home"
+msgstr "الصفحة الرئيسية"
+
+msgid "IBAN"
+msgstr "رقم الآيبان"
+
+msgid "Login"
+msgstr "تسجيل الدخول"
+
+msgid "Main menu"
+msgstr "القائمة الرئيسية"
+
+msgid "More"
+msgstr "المزيد"
+
+msgid "More details"
+msgstr "تفاصيل أكثر"
+
+msgid "My info"
+msgstr "معلوماتي"
+
+msgid "Next"
+msgstr "التالي"
+
+msgid "No donation opportunities found"
+msgstr "لا توجد فرص تبرع"
+
+msgid "No questions yet"
+msgstr "لا توجد أسئلة بعد"
+
+msgid "No reviews yet, add yours"
+msgstr "لا توجد تقييمات, اترك تقييمك"
+
+msgid "No. of donations"
+msgstr "مرات التبرع"
+
+msgid "Our location"
+msgstr "العنوان"
+
+msgid "Page not found"
+msgstr "لم يتم إيجاد الصفحة"
+
+msgid "Pagination"
+msgstr "التنقل بين الصفحات"
+
+msgid "Payment options"
+msgstr "خيارات الدفع"
+
+msgid "Please enter the donation amount"
+msgstr "الرجاء إدخال مبلغ التبرع"
+
+msgid "Prev"
+msgstr "السابق"
+
+msgid "Questions"
+msgstr "الأسئلة"
+
+msgid "Quick donation"
+msgstr "التبرع السريع"
+
+msgid "Remaining"
+msgstr "المتبقي"
+
+msgid "Remaining amount"
+msgstr "المبلغ المتبقي"
+
+msgid "Remove"
+msgstr "حذف"
+
+msgid "Reviews"
+msgstr "التقييمات"
+
+msgid "Saudi Business Center"
+msgstr "المركز السعودي للأعمال"
+
+msgid "Search"
+msgstr "ابحث"
+
+#, python-format
+msgid "Search results for \"%s\""
+msgstr "نتائج البحث عن \"%s\""
+
+msgid "Send the donation as a gift"
+msgstr "إهداء التبرع"
+
+msgid "Send your donation as a gift"
+msgstr "أرسل تبرعك كإهداء"
+
+msgid "Share"
+msgstr "شارك الأجر"
+
+msgid "Supported"
+msgstr "تم دعم"
+
+msgid "The link has been copied to the clipboard"
+msgstr "تم نسخ الرابط إلي الحافظة"
+
+#, python-format
+msgid "The maximum donation amount is %s"
+msgstr "أعلى مبلغ للتبرع هو %s"
+
+msgid "There are no details"
+msgstr "لاتوجد تفاصيل"
+
+msgid "This donation will be sent as a gift"
+msgstr "سيتم إرسال هذا التبرع كإهداء"
+
+msgid "This opportunity has ended"
+msgstr "الفرصة منتهية"
+
+msgid "To"
+msgstr "إلى"
+
+msgid "Unit price"
+msgstr "الوحدة"
+
+msgid "Units"
+msgstr "عدد الوحدات"
+
+msgid "VAT certificate"
+msgstr "شهادة ضريبة القيمة المضافة"
+
+msgid "VAT number:"
+msgstr "الرقم الضريبي:"
+
+msgid "View details"
+msgstr "عرض تفاصيل الفرصة"
+
+msgid "Website"
+msgstr "الموقع الإلكتروني"
+
+msgid "You may also like"
+msgstr "قد يعجبك أيضاً"
+
+msgid "per unit"
+msgstr "للوحدة"
+
+msgid "units"
+msgstr "وحدة"
