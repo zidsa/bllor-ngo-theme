@@ -1,0 +1,263 @@
+{
+  "name": {
+    "ar": "إعدادات القالب",
+    "en": "Theme settings"
+  },
+  "groups": [
+    {
+      "id": "colors",
+      "name": {
+        "ar": "الالوان",
+        "en": "Colors"
+      },
+      "settings": [
+        {
+          "id": "body",
+          "type": "fieldset",
+          "label": {
+            "ar": "خيارات الصفحة",
+            "en": "Page"
+          },
+          "expandable": true,
+          "settings": [
+            {
+              "id": "background_color",
+              "type": "color",
+              "label": {
+                "ar": "لون الخلفية",
+                "en": "Background color"
+              }
+            },
+            {
+              "id": "text_color",
+              "type": "color",
+              "label": {
+                "ar": "لون النص",
+                "en": "Text color"
+              }
+            }
+          ]
+        },
+        {
+          "id": "header",
+          "type": "fieldset",
+          "label": {
+            "ar": "رأس الصفحة",
+            "en": "Header"
+          },
+          "expandable": true,
+          "settings": [
+            {
+              "id": "background_color",
+              "type": "color",
+              "label": {
+                "ar": "لون الخلفية",
+                "en": "Background color"
+              }
+            },
+            {
+              "id": "text_color",
+              "type": "color",
+              "label": {
+                "ar": "لون النص",
+                "en": "Text color"
+              }
+            },
+            {
+              "id": "text_color_hover",
+              "type": "color",
+              "label": {
+                "ar": "لون النص عند المرور",
+                "en": "Text hover color"
+              }
+            }
+          ]
+        },
+        {
+          "id": "footer",
+          "type": "fieldset",
+          "label": {
+            "ar": "اسفل الصفحة",
+            "en": "Footer"
+          },
+          "expandable": true,
+          "settings": [
+            {
+              "id": "background_color",
+              "type": "color",
+              "label": {
+                "ar": "لون خلفية الفوتر",
+                "en": "Footer background color"
+              }
+            },
+            {
+              "id": "background_color_copyrights",
+              "type": "color",
+              "label": {
+                "ar": "لون خلفية الحقوق",
+                "en": "Copyrights background color"
+              }
+            },
+            {
+              "id": "text_color",
+              "type": "color",
+              "label": {
+                "ar": "لون النص",
+                "en": "Text color"
+              }
+            }
+          ]
+        },
+        {
+          "id": "product_image",
+          "type": "fieldset",
+          "label": {
+            "ar": "صورة المنتج",
+            "en": "Product image"
+          },
+          "expandable": true,
+          "settings": [
+            {
+              "id": "fit_image",
+              "type": "select",
+              "label": {
+                "ar": "تناسق صورة المنتج",
+                "en": "Product image fit"
+              },
+              "options": [
+                {
+                  "value": "cover",
+                  "label": {
+                    "ar": "الحفاظ على نسبة العرض إلى الارتفاع عن طريق اقتصاص الصورة (cover)",
+                    "en": "maintain its aspect ratio by cropping the image (cover)"
+                  }
+                },
+                {
+                  "value": "contain",
+                  "label": {
+                    "ar": "الحفاظ على نسبة العرض إلى الارتفاع (contain)",
+                    "en": "maintain its aspect ratio (contain)"
+                  }
+                },
+                {
+                  "value": "fill",
+                  "label": {
+                    "ar": "املأ مربع محتوى العنصر (fill)",
+                    "en": "fill the element's content box (fill)"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "donate",
+      "name": {
+        "ar": "خيارات التبرع",
+        "en": "Donation settings"
+      },
+      "settings": [
+        {
+          "id": "money",
+          "type": "fieldset",
+          "label": {
+            "ar": "المبالغ المتاحة",
+            "en": "Available amounts"
+          },
+          "expandable": true,
+          "settings": [
+            {
+              "id": "default_money",
+              "type": "number",
+              "label": {
+                "ar": "المبلغ الافتراضي المدخل",
+                "en": "Default amount"
+              }
+            },
+            {
+              "id": "money_list",
+              "type": "list",
+              "label": {
+                "ar": "المبالغ المقترحة",
+                "en": "Suggested amounts"
+              },
+              "max_items": 3,
+              "settings": [
+                {
+                  "id": "amount",
+                  "type": "text",
+                  "label": {
+                    "ar": "المبلغ",
+                    "en": "Amount"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "quick_donate",
+      "name": {
+        "ar": "التبرع السريع",
+        "en": "Quick donation"
+      },
+      "settings": [
+        {
+          "id": "main_btn_bg_color",
+          "type": "color",
+          "label": {
+            "ar": "لون خلفية زر التبرع السريع",
+            "en": "Quick donation button background color"
+          }
+        },
+        {
+          "id": "image",
+          "type": "image",
+          "label": {
+            "ar": "صورة البانر داخل النافذة",
+            "en": "Banner image inside the window"
+          }
+        },
+        {
+          "id": "message",
+          "type": "text",
+          "label": {
+            "ar": "رسالة التبرع السريع",
+            "en": "Message"
+          }
+        },
+        {
+          "id": "list_money",
+          "type": "list",
+          "label": {
+            "ar": "مبالغ التبرع السريع",
+            "en": "Quick donation amounts"
+          },
+          "max_items": 3,
+          "settings": [
+            {
+              "id": "amount",
+              "type": "number",
+              "label": {
+                "ar": "المبلغ",
+                "en": "Amount"
+              }
+            }
+          ]
+        },
+        {
+          "id": "show_payments",
+          "type": "checkbox",
+          "label": {
+            "ar": "إظهار طرق الدفع في نافذة التبرع السريع",
+            "en": "Show payment methods in the quick donation window"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "name": {
+    "ar": "اسفل الصفحة",
+    "en": "Footer"
+  },
+  "groups": [
+    {
+      "id": "about_us",
+      "name": {
+        "ar": "عن المتجر",
+        "en": "About us"
+      },
+      "settings": [
+        {
+          "id": "title",
+          "type": "text",
+          "label": {
+            "ar": "العنوان",
+            "en": "Title"
+          }
+        },
+        {
+          "id": "des",
+          "type": "textarea",
+          "label": {
+            "ar": "النص",
+            "en": "Description"
+          }
+        }
+      ]
+    },
+    {
+      "id": "links_1",
+      "name": {
+        "ar": "روابط مهمة",
+        "en": "Links"
+      },
+      "settings": [
+        {
+          "id": "hide",
+          "type": "checkbox",
+          "label": {
+            "ar": "إخفاء",
+            "en": "Hide"
+          }
+        },
+        {
+          "id": "title",
+          "type": "text",
+          "label": {
+            "ar": "العنوان",
+            "en": "Title"
+          }
+        },
+        {
+          "id": "links",
+          "type": "list",
+          "label": {
+            "ar": "الروابط",
+            "en": "Links"
+          },
+          "settings": [
+            {
+              "id": "title",
+              "type": "text",
+              "label": {
+                "ar": "العنوان",
+                "en": "Title"
+              }
+            },
+            {
+              "id": "url",
+              "type": "url",
+              "label": {
+                "ar": "الرابط",
+                "en": "Link"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "certificates",
+      "name": {
+        "ar": "الشهادات المخصصة",
+        "en": "Custom certificates"
+      },
+      "settings": [
+        {
+          "id": "vat_image",
+          "type": "image",
+          "label": {
+            "ar": "صورة الرقم الضريبي",
+            "en": "VAT image"
+          }
+        },
+        {
+          "id": "vat_number",
+          "type": "text",
+          "label": {
+            "ar": "الرقم الضريبي",
+            "en": "VAT number"
+          }
+        },
+        {
+          "id": "cr_image",
+          "type": "image",
+          "label": {
+            "ar": "صورة السجل التجاري",
+            "en": "Commercial registration image"
+          }
+        },
+        {
+          "id": "cr_number",
+          "type": "text",
+          "label": {
+            "ar": "رقم السجل التجاري",
+            "en": "Commercial registration number"
+          }
+        }
+      ]
+    }
+  ]
+}

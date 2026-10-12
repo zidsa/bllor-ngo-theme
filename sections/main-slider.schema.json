@@ -1,0 +1,40 @@
+{
+  "name": {
+    "ar": "شرائح الصور",
+    "en": "Slider"
+  },
+  "template": "sections/main-slider.jinja",
+  "settings": [
+    {
+      "id": "slider",
+      "type": "list",
+      "label": {
+        "ar": "الصور",
+        "en": "Slides"
+      },
+      "max_items": 4,
+      "settings": [
+        {
+          "id": "image",
+          "type": "image",
+          "label": {
+            "ar": "الصورة",
+            "en": "Image"
+          },
+          "info": {
+            "ar": "ارفع صورة بأبعاد 1647×531",
+            "en": "Upload a 1647×531 image"
+          }
+        },
+        {
+          "id": "url",
+          "type": "url",
+          "label": {
+            "ar": "الرابط",
+            "en": "Link"
+          }
+        }
+      ]
+    }
+  ]
+}

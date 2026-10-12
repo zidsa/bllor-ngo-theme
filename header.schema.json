@@ -1,0 +1,105 @@
+{
+  "name": {
+    "ar": "اعلى الصفحة",
+    "en": "Header"
+  },
+  "groups": [
+    {
+      "id": "announcement_bar",
+      "name": {
+        "ar": "شريط التنبيهات",
+        "en": "Announcement bar"
+      },
+      "settings": [
+        {
+          "id": "display",
+          "type": "checkbox",
+          "label": {
+            "ar": "إظهار شريط التنبيهات",
+            "en": "Show the announcement bar"
+          }
+        },
+        {
+          "id": "text",
+          "type": "text",
+          "label": {
+            "ar": "النص",
+            "en": "Text"
+          }
+        },
+        {
+          "id": "url",
+          "type": "url",
+          "label": {
+            "ar": "الرابط",
+            "en": "Link"
+          }
+        },
+        {
+          "id": "background_color",
+          "type": "color",
+          "label": {
+            "ar": "لون الخلفية",
+            "en": "Background color"
+          }
+        },
+        {
+          "id": "text_color",
+          "type": "color",
+          "label": {
+            "ar": "لون النص",
+            "en": "Text color"
+          }
+        }
+      ]
+    },
+    {
+      "id": "header",
+      "name": {
+        "ar": "رأس الصفحة",
+        "en": "Header"
+      },
+      "settings": [
+        {
+          "id": "options",
+          "type": "checkboxes",
+          "label": {
+            "ar": "الخيارات",
+            "en": "Options"
+          },
+          "options": [
+            {
+              "value": "hide_search_bar",
+              "label": {
+                "ar": "إخفاء شريط البحث",
+                "en": "Hide search bar"
+              }
+            },
+            {
+              "value": "hide_language",
+              "label": {
+                "ar": "إخفاء اللغة",
+                "en": "Hide language"
+              }
+            },
+            {
+              "value": "hide_country",
+              "label": {
+                "ar": "إخفاء الدولة",
+                "en": "Hide country"
+              }
+            }
+          ]
+        },
+        {
+          "id": "search_placeholder",
+          "type": "text",
+          "label": {
+            "ar": "تلميح شريط البحث",
+            "en": "Search placeholder"
+          }
+        }
+      ]
+    }
+  ]
+}
