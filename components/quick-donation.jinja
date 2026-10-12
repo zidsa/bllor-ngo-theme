@@ -1,0 +1,49 @@
+{# Floating quick donation button. Donates to the store's system-managed
+   "zid-quick-donation" product (an open donation_item created by extension-backend).
+   Shown only when the store enables quick donation. #}
+{% set qd_amounts = settings.quick_donate_list_money | default([], true) %}
+{% set qd_color = settings.quick_donate_main_btn_bg_color | default('var(--primary-color)', true) %}
+{% set currency_symbol = safeget(store, 'settings.general.currency.symbol', '') %}
+<link rel="stylesheet" href="{{ 'quick-donation.css' | asset_url }}">
+<div id="containerForm" class="end-0" data-quick-donation>
+    <button id="quickDonateBtn" type="button" style="--bg:{{ qd_color }};--color:#fff" class="btn d-flex align-items-center gap-1 btn-primary" data-qd-toggle>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17.6487 12.7124C16.8188 12.6974 16.0077 12.4631 15.2976 12.0334C14.4153 11.601 13.7202 10.8627 13.3418 9.95585C12.9634 9.04907 12.9274 8.03567 13.2406 7.10435C13.7492 5.6668 14.7997 4.48503 16.1676 3.81135C17.4643 3.13345 18.8718 2.69317 20.3236 2.51135C20.4699 2.50178 20.6158 2.53569 20.7428 2.60883C20.8699 2.68196 20.9724 2.79105 21.0376 2.92235C21.6058 4.27151 21.9272 5.71166 21.9866 7.17435C22.0888 8.69612 21.5901 10.1973 20.5976 11.3554C20.2306 11.778 19.7778 12.1176 19.2693 12.3515C18.7608 12.5855 18.2084 12.7085 17.6487 12.7124ZM19.8866 4.08535C18.8336 4.29485 17.8148 4.64992 16.8597 5.14035C15.8429 5.62953 15.0568 6.49588 14.6686 7.55535C14.4584 8.16165 14.4835 8.82478 14.7389 9.41349C14.9942 10.0022 15.4613 10.4736 16.0476 10.7344C16.5668 11.1117 17.2087 11.28 17.8462 11.2059C18.4836 11.1318 19.0699 10.8207 19.4886 10.3344C20.2133 9.47087 20.5721 8.35853 20.4886 7.23435C20.4354 6.1618 20.2328 5.10191 19.8866 4.08535Z" fill="white"/><path d="M7.77377 16.1143C7.10064 16.1073 6.43904 15.9386 5.84476 15.6223C4.51359 14.8788 3.52646 13.6437 3.09476 12.1813C2.64524 10.7888 2.44781 9.32722 2.51175 7.86533C2.52822 7.71926 2.58712 7.5812 2.68112 7.46818C2.77512 7.35517 2.90011 7.27214 3.04074 7.22933C4.46565 6.89888 5.93821 6.82607 7.38876 7.01433C8.9055 7.17157 10.3004 7.91639 11.2747 9.08933C11.8917 9.85458 12.2093 10.818 12.1684 11.8001C12.1276 12.7822 11.7311 13.716 11.0528 14.4273C10.6674 14.936 10.1726 15.3517 9.60507 15.6437C9.03755 15.9357 8.41175 16.0965 7.77377 16.1143ZM3.99374 8.55733C4.0222 9.63138 4.19992 10.6962 4.52176 11.7213C4.83222 12.8065 5.55366 13.7278 6.53275 14.2893C7.09434 14.5993 7.75183 14.687 8.37503 14.5351C8.99823 14.3832 9.54168 14.0029 9.89774 13.4693C10.3573 13.0213 10.632 12.4171 10.6676 11.7762C10.7031 11.1354 10.4969 10.5045 10.0898 10.0083C9.35902 9.14778 8.32151 8.60608 7.19772 8.49833C6.13218 8.36883 5.0538 8.38869 3.99374 8.55733Z" fill="white"/><path d="M13.3287 21.4904C13.1462 21.4901 12.9701 21.4234 12.8334 21.3026C12.6966 21.1819 12.6085 21.0154 12.5856 20.8344C11.5656 12.7984 16.1406 8.81337 16.3406 8.64737C16.4927 8.52353 16.6872 8.46416 16.8825 8.48199C17.0778 8.49982 17.2583 8.59343 17.3854 8.74277C17.5125 8.8921 17.5761 9.08528 17.5625 9.28091C17.5489 9.47655 17.4592 9.65907 17.3127 9.78937C17.1427 9.93537 13.1636 13.4544 14.0766 20.6454C14.0891 20.7431 14.0822 20.8423 14.0564 20.9374C14.0305 21.0324 13.9862 21.1214 13.926 21.1993C13.8657 21.2772 13.7906 21.3425 13.7051 21.3914C13.6196 21.4403 13.5254 21.4719 13.4277 21.4844C13.3948 21.4885 13.3618 21.4905 13.3287 21.4904Z" fill="white"/><path d="M13.1667 18.7543C12.9828 18.754 12.8055 18.6863 12.6683 18.5639C12.5312 18.4414 12.4437 18.2729 12.4227 18.0903C12.0227 14.5903 8.39269 13.1213 8.35669 13.1073C8.26476 13.0711 8.18082 13.0172 8.10974 12.9486C8.03865 12.88 7.9818 12.798 7.94238 12.7075C7.90296 12.6169 7.88175 12.5194 7.88 12.4206C7.87825 12.3219 7.89601 12.2237 7.93219 12.1318C7.96837 12.0399 8.02227 11.956 8.09088 11.8849C8.15948 11.8138 8.24138 11.7569 8.33197 11.7175C8.42255 11.6781 8.52006 11.6569 8.61883 11.6551C8.7176 11.6534 8.81572 11.6711 8.90765 11.7073C9.09165 11.7803 13.4077 13.5333 13.9127 17.9143C13.9354 18.1119 13.8788 18.3104 13.7552 18.4663C13.6317 18.6221 13.4512 18.7225 13.2537 18.7453C13.2237 18.7523 13.1947 18.7543 13.1667 18.7543Z" fill="white"/></svg>
+        {{ _('Quick donation') }}
+    </button>
+    <div id="quickDonateTemplate" class="end-0">
+        <div class="quick-donation-card">
+            <div class="qd-header d-flex align-items-center justify-content-between w-100">
+                <h5 class="qd-header-header-title">{{ _('Quick donation') }}</h5>
+                <button class="qd-close" type="button" data-qd-toggle aria-label="{{ _('Close') }}"><i class="fa-solid fa-close"></i></button>
+            </div>
+            <img src="{{ (image_url(settings.quick_donate_image, w=600, q=85, f='auto') | trim) if settings.quick_donate_image else ('quick.png' | asset_url) }}" class="qd-image" alt="">
+            {% if settings.quick_donate_message %}
+                <div class="qd-hint w-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M16.875 10C16.875 6.20275 13.7972 3.125 10 3.125C6.20274 3.125 3.125 6.20274 3.125 10C3.125 13.7965 6.20279 16.875 10 16.875C13.7972 16.875 16.875 13.7965 16.875 10ZM18.125 10C18.125 14.4867 14.4876 18.125 10 18.125C5.51234 18.125 1.875 14.4867 1.875 10C1.875 5.51239 5.51239 1.875 10 1.875C14.4876 1.875 18.125 5.51239 18.125 10Z" fill="#FF8C3A"/><path d="M9.37988 13.0778V9.49463C9.3799 9.14947 9.65972 8.86963 10.0049 8.86963C10.35 8.8697 10.6299 9.14951 10.6299 9.49463V13.0778C10.6298 13.4229 10.35 13.7027 10.0049 13.7028C9.65975 13.7028 9.37996 13.4229 9.37988 13.0778ZM9.375 6.96208V6.90918C9.375 6.564 9.65482 6.28418 10 6.28418C10.3452 6.28418 10.625 6.564 10.625 6.90918V6.96208C10.6249 7.30716 10.3451 7.58708 10 7.58708C9.65489 7.58708 9.37511 7.30716 9.375 6.96208Z" fill="#FF8C3A"/></svg>
+                    <span class="qd-hint-text">{{ settings.quick_donate_message | e }}</span>
+                </div>
+            {% endif %}
+            <div id="qdButsAmounts" class="qd-amounts d-flex justify-content-center gap-2 w-100">
+                {% for amount in (qd_amounts | map(attribute='amount') | list if qd_amounts else [50, 100, 150]) %}
+                    <button type="button" data-price="{{ amount }}">{{ amount }}{{ currency_symbol }}</button>
+                {% endfor %}
+            </div>
+            <div class="wrapper--input-price w-100 d-flex align-items-center">
+                <input type="text" inputmode="numeric" id="qdInputAmount" class="qd-input w-100" placeholder="{{ _('Donation amount') }}">
+                <span class="suffix">{{ currency_symbol }}</span>
+            </div>
+            <button type="button" class="qd-submit btn btn-primary w-100 rounded-pill">{{ _('Donate now') }}</button>
+            {% if settings.quick_donate_show_payments %}
+                <div class="qd-payments">
+                    <div class="d-flex flex-wrap align-items-center gap-2 shipping-and-payment-items justify-content-center">
+                        {% for method in safeget(store, 'settings.checkout.payment_methods', []) or [] %}
+                            <img src="{{ image_url(method.icon, h=80, q=85) | trim }}" alt="{{ method.name | e }}" height="20" width="40" class="img-fluid icon--shipping-and-payment" loading="lazy">
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="quick-donation-overlay" data-qd-toggle></div>
+<script src="{{ 'quick-donation.js' | asset_url }}" defer></script>
