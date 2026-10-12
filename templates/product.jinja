@@ -69,6 +69,10 @@
                             {% if is_complete %}
                                 <p class="text-center text-ended">{{ _('This opportunity has ended') }}</p>
                             {% else %}
+                                {% if is_project %}
+                                    {# Shown by js.js when the donation window is not open. #}
+                                    <p class="text-center text-ended d-none" data-donation-closed>{{ _('This opportunity has ended') }}</p>
+                                {% endif %}
                                 <div data-donation-form>
                                     <p class="sub-title">{{ _('Donation amount') }}</p>
                                     {% if is_item %}

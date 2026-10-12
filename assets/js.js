@@ -93,6 +93,13 @@
    * Crowdfunding projects can have an availability window. Pages may be served from a
    * cache, so the window is evaluated in the browser, as the catalog theme did.
    */
+  // The API sends "2024-03-27 10:29:00+00:00"; Safari only parses the ISO "T" form.
+  function parseDate(value) {
+    if (!value) return null;
+    var date = new Date(String(value).replace(" ", "T"));
+    return isNaN(date.getTime()) ? null : date;
+  }
+
   function daysBetween(later, earlier) {
     return Math.floor((later - earlier) / (1000 * 3600 * 24));
   }
@@ -102,16 +109,13 @@
     var now = new Date();
     $(root || document).find("[data-donation-window]").each(function () {
       var label = $(this);
-      var start = label.attr("data-start") ? new Date(label.attr("data-start")) : null;
-      var end = label.attr("data-end") ? new Date(label.attr("data-end")) : null;
+      var start = parseDate(label.attr("data-start"));
+      var end = parseDate(label.attr("data-end"));
       var card = label.closest("[data-donation-product-id], [data-donation-page]");
       var text;
       var open = true;
 
-      if (!start && !end) {
-        text = lang === "en" ? "Permanent chance" : "فرصة دائمة";
-        label.addClass("donation-product-message-tag-open-permanent");
-      } else if (start && now < start) {
+      if (start && now < start) {
         var days = daysBetween(start, now);
         text = lang === "en" ? "Opportunity to donate begins after " + days + " day" : "تبدأ فرصة التبرع بعد " + days + " يوم";
         label.addClass("donation-product-message-tag-no-started");
@@ -120,13 +124,20 @@
         text = lang === "en" ? "Period expired" : "انتهت مدة المشروع";
         label.addClass("donation-product-message-tag-ended");
         open = false;
-      } else {
+      } else if (end) {
         text = (lang === "en" ? "Remaining period : " : "المدة المتبقية : ") + daysBetween(end, now) + (lang === "en" ? " day" : " يوم");
         label.addClass("donation-product-message-tag-remaining");
+      } else {
+        // No end date (and already started): always open.
+        text = lang === "en" ? "Permanent chance" : "فرصة دائمة";
+        label.addClass("donation-product-message-tag-open-permanent");
       }
 
       label.text(text).addClass("show");
-      if (!open) card.find("[data-donation-form]").remove();
+      if (!open) {
+        card.find("[data-donation-form]").remove();
+        card.find("[data-donation-closed]").removeClass("d-none");
+      }
     });
   }
 })(jQuery);

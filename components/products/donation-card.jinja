@@ -35,6 +35,14 @@
             {% include 'components/products/donation-progress.jinja' %}
         {% endif %}
 
+        {% if is_project %}
+            {# Shown by js.js when the project's donation window is not open. #}
+            <div class="actions d-none" data-donation-closed>
+                <div class="w-100 text-center">
+                    <a class="btn btn-link view-det" href="{{ product_url }}">{{ _('View details') }}</a>
+                </div>
+            </div>
+        {% endif %}
         <div data-donation-form>
             {% if can_donate and not is_complete %}
                 {% if is_item %}
