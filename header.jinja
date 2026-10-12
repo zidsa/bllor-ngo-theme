@@ -1,0 +1,54 @@
+{% set header_options = settings.header_options | default([], true) %}
+{% set show_language = store.languages | length > 1 and 'hide_language' not in header_options %}
+{% set show_country = store.countries | length > 1 and 'hide_country' not in header_options %}
+{% set show_region = show_language or show_country %}
+{% set gift_settings = safeget(store, 'settings.checkout.gift_order_settings', {}) or {} %}
+
+{% include 'components/header/mobile-menu.jinja' %}
+{% include 'components/header/announcement-bar.jinja' %}
+<header class="header" id="header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-4">
+                <a class="d-lg-none d-inline-block btn-show-offcanvas" href="javascript:;" aria-label="{{ _('Main menu') }}"><i class="fa-solid fa-bars"></i></a>
+                {% include 'components/header/menu.jinja' %}
+            </div>
+            <div class="col-4 text-center">
+                <a href="{{ url_for('home') }}"><img class="logo-img" src="{{ store.logo }}" alt="{{ store.name | e }}"></a>
+            </div>
+            <div class="col-4 text-end">
+                <ul class="navbar-menu">
+                    {% if 'hide_search_bar' not in header_options %}
+                        <li class="position-relative">
+                            {% include 'components/header/search.jinja' %}
+                        </li>
+                    {% endif %}
+                    {% if show_region %}
+                        <li class="d-none d-md-inline-block">
+                            {% include 'components/header/region.jinja' %}
+                        </li>
+                    {% endif %}
+                    <li class="d-none d-md-inline-block">
+                        {% if session.is_guest %}
+                            <a href="/auth/login" class="d-flex">{{ _('Login') }}</a>
+                        {% else %}
+                            <a href="{{ url_for('profile') }}">{{ _('My info') }}</a>
+                        {% endif %}
+                    </li>
+                    <li class="position-relative">
+                        <a class="block-cart" href="{{ url_for('cart_page') }}" aria-label="{{ _('Cart') }}"><i class="fa-solid fa-shopping-cart"></i><span class="number d-none cart-badge"></span></a>
+                        {% if gift_settings.is_gift_order_enabled == '1' and gift_settings.is_gift_order_customer_motivation_enabled == '1' %}
+                            <div id="gift-tooltip" class="d-none popover" role="tooltip">
+                                <div class="gift-popover-body">
+                                    <img src="{{ 'gift-popover-icon.svg' | asset_url }}" width="24" height="24" alt="">
+                                    <p class="my-2 text-primary">{{ _('Send your donation as a gift') }}</p>
+                                    <a href="{{ url_for('cart_page') }}" class="btn btn-primary">{{ _('Continue') }}</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>

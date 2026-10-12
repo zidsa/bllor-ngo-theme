@@ -1,0 +1,9 @@
+{% if settings.announcement_bar_display %}
+    <div class="alert announcement-bar alert-dismissible fade show" role="alert" style="{% if settings.announcement_bar_background_color %}background: {{ settings.announcement_bar_background_color }}{% endif %}">
+        <div class="container-fluid">
+            <a style="color: {{ settings.announcement_bar_text_color | default('#fff', true) }} !important;"
+               {% if settings.announcement_bar_url %}href="{{ settings.announcement_bar_url }}"{% endif %}>{{ settings.announcement_bar_text | e }}</a>
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="{{ _('Close') }}"><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+{% endif %}

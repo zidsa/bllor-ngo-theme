@@ -1,0 +1,41 @@
+{# Off-canvas menu for small screens, built by hc-offcanvas-nav in js.js. #}
+{% macro link(item) %}{{ item.url | localized_url if item.resource_type != 'url' else item.url }}{% endmacro %}
+<nav id="main-nav" class="d-none" data-title="{{ _('Main menu') }}">
+    <ul>
+        {% for menu in safeget(store, 'settings.menus.main_menu.items', []) %}
+            {% if menu.items | length > 0 %}
+                <li>
+                    <a href="{{ link(menu) }}">{{ menu.label }}</a>
+                    <ul>
+                        {% for sub in menu.items %}
+                            {% if sub.items | length > 0 %}
+                                <li>
+                                    <a href="{{ link(sub) }}">{{ sub.label }}</a>
+                                    <ul>
+                                        {% for subsub in sub.items %}
+                                            <li><a href="{{ link(subsub) }}">{{ subsub.label }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% else %}
+                                <li><a href="{{ link(sub) }}">{{ sub.label }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% else %}
+                <li><a href="{{ link(menu) }}">{{ menu.label }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if show_region %}
+            <li>{% include 'components/header/region.jinja' %}</li>
+        {% endif %}
+        <li>
+            {% if session.is_guest %}
+                <a href="/auth/login" class="d-flex">{{ _('Login') }}</a>
+            {% else %}
+                <a href="{{ url_for('profile') }}">{{ _('My info') }}</a>
+            {% endif %}
+        </li>
+    </ul>
+</nav>

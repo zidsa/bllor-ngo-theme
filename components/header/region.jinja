@@ -1,0 +1,13 @@
+{# Language and country switcher; opens Vitrin's region dialog. #}
+<a class="bt-change-lang d-flex align-items-center" href="javascript:;" onclick="zidOpenRegionSettingDialog()">
+    {% if show_language %}
+        <i class="me-1 fa-solid fa-globe fa-fw"></i>
+        {% for lang in store.languages %}
+            {% if lang.code != session.lang %}<span>{{ lang.code }}</span>{% endif %}
+        {% endfor %}
+        {% if show_country %}<span class="mx-1">|</span>{% endif %}
+    {% endif %}
+    {% if show_country and session.country.flag %}
+        <span><img src="{{ session.country.flag }}" alt="{{ session.country.name }}" class="img-fluid" style="width: 27px;height:18px;"></span>
+    {% endif %}
+</a>

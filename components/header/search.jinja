@@ -1,0 +1,6 @@
+<button class="show-search-button" type="button" aria-label="{{ _('Search') }}"><i class="fa-solid fa-search"></i></button>
+<form class="block-search-form" action="{{ url_for('list_products') }}">
+    <input value="{{ session.query_params.get('q', '') | e }}" type="text" name="q"
+           placeholder="{{ settings.header_search_placeholder | default(_('Search'), true) | e }}" autocomplete="off">
+    <button type="submit" aria-label="{{ _('Search') }}"><i class="fa-solid fa-search"></i></button>
+</form>

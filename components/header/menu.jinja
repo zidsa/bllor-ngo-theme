@@ -1,0 +1,29 @@
+{# Desktop main menu: three levels from the store's main menu. #}
+{% macro link(item) %}{{ item.url | localized_url if item.resource_type != 'url' else item.url }}{% endmacro %}
+<ul class="navbar-menu d-none d-lg-block">
+    {% for menu in safeget(store, 'settings.menus.main_menu.items', []) %}
+        {% if menu.items | length > 0 %}
+            <li class="has-submenu">
+                <a href="{{ link(menu) }}">{{ menu.label }} <i class="fa-solid fa-chevron-down fa-fw sub-menu-down"></i></a>
+                <ul class="sub-menu text-start">
+                    {% for sub in menu.items %}
+                        {% if sub.items | length > 0 %}
+                            <li class="has-sub">
+                                <a href="{{ link(sub) }}">{{ sub.label }} <i class="fa-solid fa-angle-right"></i></a>
+                                <ul>
+                                    {% for subsub in sub.items %}
+                                        <li><a href="{{ link(subsub) }}">{{ subsub.label }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li><a href="{{ link(sub) }}">{{ sub.label }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </li>
+        {% else %}
+            <li><a href="{{ link(menu) }}">{{ menu.label }}</a></li>
+        {% endif %}
+    {% endfor %}
+</ul>
