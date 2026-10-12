@@ -1,0 +1,257 @@
+#containerForm {
+  position: fixed;
+  top: 19%;
+  z-index: 1041;
+}
+#quickDonateTemplate {
+  position: absolute;
+  margin: 5px;
+
+}
+.quick-donation-card {
+  border-radius: 16px;
+  border: 1px solid var(--outlined-outlined, #e4e4e5);
+  background: var(--Neutral-Base-white, #fff);
+  display: flex;
+  width: 324px;
+  padding: var(--spacing-200, 16px);
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-200, 16px);
+}
+.qd-header .qd-header-header-title {
+  color: var(--text-primary, #0e0217);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 175%; /* 31.5px */
+  letter-spacing: 0.15px;
+}
+.qd-header .qd-close {
+  background: transparent;
+  outline: none;
+  border: 0;
+}
+.quick-donation-card .qd-hint {
+  display: flex;
+  height: 38px;
+  min-width: 50px;
+  padding: var(--spacing-100, 8px) var(--spacing-125, 12px);
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-075, 6px);
+  flex: 1 0 0;
+  border-radius: var(--radius-100, 8px);
+  background: var(--_components-chip-orange, #fff6f3);
+}
+.quick-donation-card .qd-hint .qd-hint-text {
+  color: var(--orange-main, #ff8c3a);
+  text-align: center;
+
+  /* Body/Md: Regular 14 */
+  font-family: "Suisse Intl";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px; /* 157.143% */
+}
+
+.qd-amounts button {
+  display: flex;
+  height: 42px;
+  padding: 12px 8px;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-075, 6px);
+  flex: 1 0 0;
+  border-radius: 360px;
+  background: rgba(237, 237, 237, 0.5);
+  border: 0;
+  outline: none;
+  color: var(--text-primary, #161616);
+  text-align: center;
+
+  /* Body/Md: Regular 16 */
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22px; /* 137.5% */
+}
+#quickDonateTemplate .qd-submit {
+  border-radius: 50px !important;
+  color: var(--primary-contrastText, #fff);
+
+  /* button/medium */
+  font-size: var(--font-size-0875-rem, 14px);
+  font-style: normal;
+  font-weight: var(--fontWeightRegular, 600);
+  line-height: 24px; /* 171.429% */
+}
+#quickDonateTemplate .wrapper--input-price {
+  position: relative;
+  padding: 0;
+  border-radius: var(--inputBorderRadius, 8px);
+  border: 1px solid var(--_components-input-outlined-enabledBorder, #ebe8ed);
+  background: var(--background-white, #fff);
+  overflow: hidden;
+}
+#quickDonateTemplate .wrapper--input-price .qd-input {
+  border: 0;
+  outline: none;
+  height: 40px;
+  padding: 0 15px;
+  /* input/value */
+  font-size: var(--font-size-0875-rem, 14px);
+  font-style: normal;
+  font-weight: var(--fontWeightRegular, 400);
+  line-height: 24px; /* 171.429% */
+}
+
+#quickDonateTemplate .wrapper--input-price .qd-input::placeholder {
+  color: var(--text-disabled, #c6c6c8);
+  opacity: 1;
+}
+
+#quickDonateTemplate
+  .wrapper--input-price
+  .qd-input::-webkit-input-placeholder {
+  color: var(--text-disabled, #c6c6c8);
+}
+
+#quickDonateTemplate .wrapper--input-price .qd-input::-moz-placeholder {
+  color: var(--text-disabled, #c6c6c8);
+  opacity: 1;
+}
+
+#quickDonateTemplate .wrapper--input-price .qd-input:-ms-input-placeholder {
+  color: var(--text-disabled, #c6c6c8);
+}
+
+#quickDonateTemplate .wrapper--input-price .qd-input:-moz-placeholder {
+  color: var(--text-disabled, #c6c6c8);
+  opacity: 1;
+}
+
+#quickDonateTemplate .wrapper--input-price .qd-input::-webkit-outer-spin-button,
+#quickDonateTemplate
+  .wrapper--input-price
+  .qd-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide spin buttons in Firefox */
+#quickDonateTemplate .wrapper--input-price .qd-input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: none;
+}
+
+[dir="rtl"] #quickDonateTemplate .wrapper--input-price .qd-input::placeholder {
+  text-align: right;
+}
+
+[dir="rtl"]
+  #quickDonateTemplate
+  .wrapper--input-price
+  .qd-input::-webkit-input-placeholder {
+  text-align: right;
+}
+
+[dir="rtl"]
+  #quickDonateTemplate
+  .wrapper--input-price
+  .qd-input::-moz-placeholder {
+  text-align: right;
+}
+#quickDonateBtn {
+    background-color: var(--bg,var(--primary-color)) !important;
+   color: var(--color) !important;
+   border-color:  var(--bg,var(--primary-color)) !important;
+}
+[dir="rtl"]
+  #quickDonateBtn {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+[dir="ltr"]
+  #quickDonateBtn {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+[dir="rtl"]
+  #quickDonateTemplate
+  .wrapper--input-price
+  .qd-input:-ms-input-placeholder {
+  text-align: right;
+}
+
+[dir="rtl"]
+  #quickDonateTemplate
+  .wrapper--input-price
+  .qd-input:-moz-placeholder {
+  text-align: right;
+}
+
+#quickDonateTemplate .wrapper--input-price .suffix {
+  padding: 0 15px;
+  color: var(--Neutral-400, #a3a1a6);
+  font-size: var(--font-size-075-rem, 12px);
+  font-style: normal;
+  font-weight: var(--fontWeightRegular, 400);
+  line-height: 22px; /* 183.333% */
+}
+
+#quickDonateTemplate .qd-image {
+  height: 155px;
+  align-self: stretch;
+  border-radius: 12px var(--radius-125, 12px) 12px 12px;
+}
+
+#quickDonateTemplate .qd-payments .icon--shipping-and-payment {
+  height: 23px;
+  width: auto;
+}
+
+.quick-donation-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.25s;
+  z-index: 1040;
+}
+.open-quick-donation .quick-donation-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+#quickDonateTemplate{
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.25s;
+}
+body.open-quick-donation{
+    position: relative;
+    overflow: hidden;
+}
+body.open-quick-donation #quickDonateTemplate{
+    visibility: visible;
+    opacity: 1;
+    pointer-events: all;
+}
+@media(max-height: 780px){
+  #quickDonateTemplate{
+    position: fixed;
+    bottom: -4px;
+    left: 50% !important;
+    right: unset !important;
+    transform: translateX(-50%);
+  }
+}
+@media(min-height: 780px){
+  #quickDonateTemplate{
+    transform: unset !important;
+  }
+}
