@@ -1,0 +1,43 @@
+{# Tabs of donation opportunities, three per tab. A tab whose product list could not be
+   resolved (for example the legacy `demo_products` placeholder) is skipped. #}
+{% set ns = namespace(tabs=[]) %}
+{% for tab in settings.products | default([], true) %}
+    {% if safeget(tab, 'products.results') %}{% set ns.tabs = ns.tabs + [tab] %}{% endif %}
+{% endfor %}
+{% set tabs = ns.tabs %}
+{% if tabs %}
+<section section-id="{{ sectionId }}" class="section">
+    <div class="container">
+        {% if settings.title %}
+            <h3 class="section-title text-center">{{ settings.title | e }}</h3>
+        {% endif %}
+        <div class="d-block">
+            <ul class="list-home-tabs nav gap-3 justify-content-center mb-4" role="tablist">
+                {% for tab in tabs %}
+                    <li>
+                        <button class="{{ 'active' if loop.first }}" id="tab-{{ sectionId }}-{{ loop.index0 }}" data-bs-toggle="tab" data-bs-target="#tab-{{ sectionId }}-{{ loop.index0 }}-pane" type="button" role="tab" aria-controls="tab-{{ sectionId }}-{{ loop.index0 }}-pane">{{ tab.title | e }}</button>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="tab-content">
+            {% for tab in tabs %}
+                <div class="tab-pane fade {{ 'show active' if loop.first }}" id="tab-{{ sectionId }}-{{ loop.index0 }}-pane" role="tabpanel">
+                    <div class="row">
+                        {% for product in tab.products.results[:3] %}
+                            <div class="col-lg-4 col-md-6 mb-md-0 mb-2">
+                                {% include 'components/products/donation-card.jinja' %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if tab.more_text and tab.products.url %}
+                        <div class="mt-3 text-center">
+                            <a href="{{ tab.products.url | localized_url }}" class="btn btn-outline-primary">{{ tab.more_text | e }}</a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}

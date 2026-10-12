@@ -1,0 +1,28 @@
+{% set slides = settings.slider | default([], true) %}
+{% if slides %}
+<section section-id="{{ sectionId }}">
+    <div class="container">
+        <div class="swiper home-slider" id="home-slider-{{ sectionId }}">
+            <div class="swiper-wrapper">
+                {% for slide in slides %}
+                    <div class="swiper-slide">
+                        <div class="block-slider">
+                            {% set img %}<img src="{{ image_url(slide.image, w=1647, q=85, f='auto') | trim }}" alt="" {{ 'loading="lazy"' if not loop.first }}>{% endset %}
+                            {% if slide.url %}<a href="{{ slide.url }}">{{ img }}</a>{% else %}{{ img }}{% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="swiper-button-next slider-arrow" id="swiper-slider-next-{{ sectionId }}"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="swiper-button-prev slider-arrow" id="swiper-slider-prev-{{ sectionId }}"><i class="fa-solid fa-chevron-left"></i></div>
+        </div>
+    </div>
+</section>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        new Swiper("#home-slider-{{ sectionId }}", {
+            navigation: { nextEl: "#swiper-slider-next-{{ sectionId }}", prevEl: "#swiper-slider-prev-{{ sectionId }}" }
+        });
+    });
+</script>
+{% endif %}

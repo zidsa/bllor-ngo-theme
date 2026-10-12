@@ -1,0 +1,8 @@
+{% extends "layout.jinja" %}
+
+{% block content %}
+    <h1 class="d-none">{{ store.name | e }}</h1>
+    <div class="home">
+        {% template_components %}
+    </div>
+{% endblock %}

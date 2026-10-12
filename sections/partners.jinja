@@ -1,0 +1,39 @@
+{% set partners = settings.store_partners | default([], true) %}
+{% if partners %}
+<section section-id="{{ sectionId }}" class="section section-partners">
+    <div class="container">
+        {% if settings.title %}
+            <h3 class="section-title text-center">{{ settings.title | e }}</h3>
+        {% endif %}
+        <div class="partner-container">
+            <div class="swiper partner-slider" id="partner-slider-{{ sectionId }}">
+                <div class="swiper-wrapper">
+                    {% for partner in partners %}
+                        <div class="swiper-slide">
+                            {% set img %}<img src="{{ image_url(partner.image, w=250, q=85, f='auto') | trim }}" alt="" loading="lazy">{% endset %}
+                            {% if partner.url %}<a href="{{ partner.url }}" target="_blank">{{ img }}</a>{% else %}{{ img }}{% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="swiper-button-next slider-arrow" id="swiper-partner-next-{{ sectionId }}"><i class="fa-solid fa-chevron-left"></i></div>
+            <div class="swiper-button-prev slider-arrow" id="swiper-partner-prev-{{ sectionId }}"><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+    </div>
+</section>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        new Swiper("#partner-slider-{{ sectionId }}", {
+            slidesPerView: 2,
+            spaceBetween: 15,
+            navigation: { nextEl: "#swiper-partner-next-{{ sectionId }}", prevEl: "#swiper-partner-prev-{{ sectionId }}" },
+            breakpoints: {
+                320: { slidesPerView: 2, spaceBetween: 20 },
+                480: { slidesPerView: 2, spaceBetween: 30 },
+                640: { slidesPerView: 2, spaceBetween: 15 },
+                992: { slidesPerView: 3 }
+            }
+        });
+    });
+</script>
+{% endif %}
