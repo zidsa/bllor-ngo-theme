@@ -1,0 +1,104 @@
+{# Donation settings are read by product cards rendered inside sections, where
+   `settings` is the section's own settings, so expose them under their own names. #}
+{% set donate_money_list = settings.donate_money_money_list | default([], true) %}
+{% set donate_default_money = settings.donate_money_default_money | default(10, true) %}
+{% set is_rtl = session.locale.language.direction == 'rtl' %}
+{% set primary_color = safeget(store, 'settings.branding.colors.primary', '') or '#1972D9' %}
+<!doctype html>
+<html class="no-js" lang="{{ session.lang }}" dir="{{ session.locale.language.direction }}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    {% vitrin_head %}
+    <style>
+        :root {
+          --primary-color: {{ primary_color }};
+          --primaryColor: {{ primary_color }};
+          --grayDark: #535353;
+          --gray: #686868;
+          --bodyBg: {{ settings.colors_body_background_color | default('#fff', true) }};
+          --bodyBgColor: {{ settings.colors_body_text_color | default('#000', true) }};
+          --headerBg: {{ settings.colors_header_background_color | default('#fff', true) }};
+          --headerTextColor: {{ settings.colors_header_text_color | default('#1972D9', true) }};
+          --headerHoverColor: {{ settings.colors_header_text_color_hover | default('#000', true) }};
+          --footerBgColor: {{ settings.colors_footer_background_color | default('#F8F7F8', true) }};
+          --footerCopyrightsBgColor: {{ settings.colors_footer_background_color_copyrights | default('transparent', true) }};
+          --footerTextColor: {{ settings.colors_footer_text_color | default('#2D3142', true) }};
+          --img-product-single-fit: {{ settings.colors_product_image_fit_image | default('cover', true) }};
+        }
+        .product--single-page img {
+          object-fit: var(--img-product-single-fit) !important;
+        }
+        #gift-tooltip {
+          position: absolute;
+          left: 50%;
+          top: 100%;
+          padding: 15px 5px;
+          text-align: center;
+          transform: translateX(-50%);
+          border: 1px solid #eee;
+          box-shadow: 0 3px 6px rgba(0,0,0,.16);
+        }
+        @media (max-width: 786px) {
+          [dir="rtl"] #gift-tooltip { left: 100%; }
+        }
+    </style>
+
+    <link href="{{ ('bootstrap.rtl.min.css' if is_rtl else 'bootstrap.min.css') | asset_url }}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.css" rel="stylesheet">
+    <link href="{{ 'hc-offcanvas-nav.css' | asset_url }}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="{{ 'jquery.toast.min.css' | asset_url }}" rel="stylesheet">
+    {% block top_links %}{% endblock %}
+    <link href="{{ 'style.css' | asset_url }}" rel="stylesheet">
+    {% if is_rtl %}
+        <link href="{{ 'rtl.css' | asset_url }}" rel="stylesheet">
+    {% endif %}
+
+    {% if user_custom_css %}
+        <link rel="stylesheet" href="{{ user_custom_css }}">
+    {% endif %}
+</head>
+<body data-template="{{ session.template }}"
+      data-cartsuccess="{{ _('Donation added successfully!') }}"
+      class="{{ 'rtl' if is_rtl else 'ltr' }} {{ 'home-page' if session.template == 'home' else 'not-home' }}">
+
+<div class="app-content">
+    {% if safeget(store, 'settings.products.quick_donation_enabled', false) %}
+        {% include 'components/quick-donation.jinja' %}
+    {% endif %}
+
+    {% include 'header.jinja' %}
+    {% block content %}{% endblock %}
+    {% include 'footer.jinja' %}
+</div>
+
+{% include 'vitrin:shared/region_settings_dialog.jinja' %}
+
+<script>
+    window.appDirection = '{{ session.locale.language.direction }}';
+    window.zidOpenRegionSettingDialog = function () {
+        if (window.region_settings_dialog) window.region_settings_dialog.open();
+    };
+    window.bllorTranslations = {
+        addedToCart: "{{ _('Donation added successfully!') }}",
+        enterAmount: "{{ _('Please enter the donation amount') }}",
+        maxAmount: "{{ _('The maximum donation amount is %s') }}",
+        copied: "{{ _('The link has been copied to the clipboard') }}"
+    };
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="{{ 'hc-offcanvas-nav.js' | asset_url }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
+<script src="{{ 'jquery.toast.min.js' | asset_url }}"></script>
+<script src="{{ 'cart.js' | asset_url }}"></script>
+<script src="{{ 'js.js' | asset_url }}"></script>
+
+{% vitrin_body %}
+
+{% block footer_scripts %}{% endblock %}
+</body>
+</html>
