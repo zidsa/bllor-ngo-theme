@@ -1,0 +1,67 @@
+{# One cart line in the legacy cart markup that bllor-ngo's cart.css styles. Expects
+   `product` (a cart product) and `is_gift_card_line`. Donations are edited with a typed
+   amount or unit count, never with a dropdown of every possible quantity. #}
+{% set is_project = product.product_class == 'crowdfunding_project' %}
+{# The quick donation product (SKU prefix "QD.") is priced at 1, so its quantity is an amount too. #}
+{% set is_amount = is_project or (product.sku or '').startswith('QD.') %}
+{% set product_href = '/products/' ~ (product.share_token or product.product_id) %}
+<div class="cart-product-row-wrapper" data-cart-line="{{ product.id }}">
+    <div class="cart-product-row">
+        <div class="cart-product-delete">
+            <a href="javascript:;" role="button" aria-label="{{ _('Remove') }}"
+               {% if is_gift_card_line %}data-remove-gift{% else %}data-remove-line="{{ product.id }}"{% endif %}>
+                <span class="icon-delete"><i class="fa-solid fa-trash"></i></span>
+            </a>
+        </div>
+        <div class="cart-product-col-img">
+            <a class="cart-product-image-link" href="{{ product_href }}">
+                {% if product.images %}
+                    <img class="cart-product-image" src="{{ safeget(product.images[0], 'thumbs.small') or safeget(product.images[0], 'image.small') }}" alt="{{ product.name | e }}">
+                {% else %}
+                    <img class="cart-product-image" src="{{ 'product-img.svg' | asset_url }}" alt="{{ product.name | e }}">
+                {% endif %}
+            </a>
+        </div>
+        <div class="cart-product-col-details">
+            <div class="product-title-row">
+                <h1><a class="cart-product-image-link" href="{{ product_href }}">{{ product.name | e }}</a></h1>
+            </div>
+            {% for field in product.custom_fields or [] %}
+                <div class="custom-field-row">
+                    <span class="custom-field-name">{{ (field.label or field.name) | e }}</span>
+                    <span class="custom-field-value">{{ (field.value if field.type not in ['CHECKBOX', 'DROPDOWN'] else field.name) | e }}</span>
+                </div>
+            {% endfor %}
+        </div>
+        {% if not is_gift_card_line %}
+            <div class="cart-products-action">
+                <div class="cart-product-quantity-dropdown form-group">
+                    <div class="input-placeholder-donation-amount" data-placeholder="{{ safeget(store, 'settings.general.currency.symbol', '') if is_amount else _('units') }}">
+                        <input class="form-control input-donation-amount donation-input cart-donation-input"
+                               type="text" inputmode="numeric"
+                               aria-label="{{ _('Donation amount') if is_amount else _('Units') }}"
+                               data-cart-quantity="{{ product.id }}"
+                               {% if product.original_product_quantity %}data-max="{{ product.original_product_quantity }}"{% endif %}
+                               value="{{ product.quantity }}">
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="cart-product-prices">
+            <div class="totals">
+                <span class="cart-product-total-price">{{ product.total_string }}</span>
+                {% if product.total_before_string %}
+                    <del class="cart-product-total-before-price">{{ product.total_before_string }}</del>
+                {% endif %}
+            </div>
+            {% if not is_amount and product.quantity > 1 %}
+                <div class="cart-product-price-each d-block">
+                    <span>{{ _('per unit') }}</span> <span>{{ product.price_string }}</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {% if product.error_message %}
+        <div class="cart-product-error-messages"><span class="message">{{ _(product.error_message) }}</span></div>
+    {% endif %}
+</div>

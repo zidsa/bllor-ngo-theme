@@ -1,0 +1,93 @@
+{% extends "layout.jinja" %}
+
+{% block top_links %}
+    <link rel="stylesheet" href="{{ 'cart.css' | asset_url }}">
+{% endblock %}
+
+{% block content %}
+{% set gift_settings = safeget(store, 'settings.checkout.gift_order_settings', {}) or {} %}
+{% set gift_enabled = gift_settings.is_gift_order_enabled == '1' %}
+{% set gifting = gifting_state(cart, store) %}
+{% set gift = cart.gift_card_details %}
+<div class="container">
+    <div class="page-content">
+        <h1 class="single-title">{{ _('Donations cart') }}</h1>
+        {% if cart.products_count > 0 %}
+            <div class="row">
+                <div class="col-12 col-lg-8 mb-3 mb-lg-0">
+                    <div class="template_for_cart_products_list">
+                        {% for product in cart.products %}
+                            {% with is_gift_card_line = gifting.card_line_id == product.id | string %}
+                                {% include 'components/cart/donation-line.jinja' %}
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+                    {% if gift and (gift.receiver_name or gift.sender_name) %}
+                        <div class="cart-gift-card mt-2">
+                            <p class="font-weight-bold mb-2">
+                                <img src="{{ 'gift_icon.png' | asset_url }}" style="display: inline-block" alt="">
+                                {{ _('This donation will be sent as a gift') }}
+                            </p>
+                            <p class="mb-2">
+                                <span>{{ _('From') }}: {{ gift.sender_name | e }}</span>
+                                <span class="mx-2">{{ _('To') }}: {{ gift.receiver_name | e }}</span>
+                            </p>
+                            {% if gift.gift_message %}
+                                <p class="mb-0"><span>{{ _('Gift message') }}:</span> {{ gift.gift_message | e }}</p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="bg-gray">
+                        <div class="cart-totals-div">
+                            {% for total in cart.totals %}
+                                {% if total.code == 'total' %}
+                                    <div class="cart-product-row-wrapper cart-totals-row-wrapper">
+                                        <div class="flex-grow-1">{{ total.title }}</div>
+                                        <div class="flex-shrink-0" style="font-weight: bold; color: var(--primary-color);">{{ total.value_string }}</div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% if gift_enabled %}
+                            <div class="mt-3">
+                                <button type="button" class="btn btn-outline-primary w-100" data-open-gift>
+                                    <i class="icon-svg icon-gift"></i>
+                                    {{ _('Edit gift details') if gift and gift.receiver_name else _('Send the donation as a gift') }}
+                                </button>
+                            </div>
+                        {% endif %}
+                        <div class="mt-3 d-flex justify-content-end">
+                            {% if safeget(store, 'settings.general.availability.closed_now') %}
+                                <a href="#" class="btn btn-disabled" aria-disabled="true">{{ _('Complete the donation') }}</a>
+                            {% else %}
+                                <a href="/checkout" class="btn btn-primary">{{ _('Complete the donation') }}</a>
+                            {% endif %}
+                        </div>
+                        <div style="margin-top: 1rem">
+                            {% include 'vitrin:checkout/apple-pay-quick-checkout.jinja' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if gift_enabled %}
+                {% include 'vitrin:cart/gift-card.jinja' %}
+            {% endif %}
+        {% else %}
+            <div class="cart-empty">
+                <div class="d-flex flex-column align-items-center">
+                    <h2 class="mt-3">{{ _('Cart is empty') }}</h2>
+                    <div class="mt-3">
+                        <a href="{{ url_for('home') }}" class="btn btn-outline-primary btn-lg btn-block">{{ _('Browse projects') }}</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block footer_scripts %}
+    <script src="{{ 'cart-page.js' | asset_url }}" defer></script>
+{% endblock %}
