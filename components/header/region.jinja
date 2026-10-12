@@ -8,6 +8,6 @@
         {% if show_country %}<span class="mx-1">|</span>{% endif %}
     {% endif %}
     {% if show_country and session.country.flag %}
-        <span><img src="{{ session.country.flag }}" alt="{{ session.country.name }}" class="img-fluid" style="width: 27px;height:18px;"></span>
+        <span><img src="{{ session.country.flag }}" alt="{{ session.country.name | e }}" class="img-fluid" style="width: 27px;height:18px;"></span>
     {% endif %}
 </a>

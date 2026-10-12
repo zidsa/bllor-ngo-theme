@@ -30,7 +30,7 @@
                     {% endif %}
                     <li class="d-none d-md-inline-block">
                         {% if session.is_guest %}
-                            <a href="/auth/login" class="d-flex">{{ _('Login') }}</a>
+                            <a href="{{ '/auth/login' | localized_url }}" class="d-flex">{{ _('Login') }}</a>
                         {% else %}
                             <a href="{{ url_for('profile') }}">{{ _('My info') }}</a>
                         {% endif %}

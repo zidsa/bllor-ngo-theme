@@ -5,26 +5,26 @@
         {% for menu in safeget(store, 'settings.menus.main_menu.items', []) %}
             {% if menu.items | length > 0 %}
                 <li>
-                    <a href="{{ link(menu) }}">{{ menu.label }}</a>
+                    <a href="{{ link(menu) }}">{{ menu.label | e }}</a>
                     <ul>
                         {% for sub in menu.items %}
                             {% if sub.items | length > 0 %}
                                 <li>
-                                    <a href="{{ link(sub) }}">{{ sub.label }}</a>
+                                    <a href="{{ link(sub) }}">{{ sub.label | e }}</a>
                                     <ul>
                                         {% for subsub in sub.items %}
-                                            <li><a href="{{ link(subsub) }}">{{ subsub.label }}</a></li>
+                                            <li><a href="{{ link(subsub) }}">{{ subsub.label | e }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 </li>
                             {% else %}
-                                <li><a href="{{ link(sub) }}">{{ sub.label }}</a></li>
+                                <li><a href="{{ link(sub) }}">{{ sub.label | e }}</a></li>
                             {% endif %}
                         {% endfor %}
                     </ul>
                 </li>
             {% else %}
-                <li><a href="{{ link(menu) }}">{{ menu.label }}</a></li>
+                <li><a href="{{ link(menu) }}">{{ menu.label | e }}</a></li>
             {% endif %}
         {% endfor %}
         {% if show_region %}
@@ -32,7 +32,7 @@
         {% endif %}
         <li>
             {% if session.is_guest %}
-                <a href="/auth/login" class="d-flex">{{ _('Login') }}</a>
+                <a href="{{ '/auth/login' | localized_url }}" class="d-flex">{{ _('Login') }}</a>
             {% else %}
                 <a href="{{ url_for('profile') }}">{{ _('My info') }}</a>
             {% endif %}

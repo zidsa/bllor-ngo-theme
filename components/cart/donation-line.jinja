@@ -4,7 +4,7 @@
 {% set is_project = product.product_class == 'crowdfunding_project' %}
 {# The quick donation product (SKU prefix "QD.") is priced at 1, so its quantity is an amount too. #}
 {% set is_amount = is_project or (product.sku or '').startswith('QD.') %}
-{% set product_href = '/products/' ~ (product.share_token or product.product_id) %}
+{% set product_href = product.url or ('/products/' ~ (product.share_token or product.product_id)) %}
 <div class="cart-product-row-wrapper" data-cart-line="{{ product.id }}">
     <div class="cart-product-row">
         <div class="cart-product-delete">

@@ -44,7 +44,7 @@
                             {% for total in cart.totals %}
                                 {% if total.code == 'total' %}
                                     <div class="cart-product-row-wrapper cart-totals-row-wrapper">
-                                        <div class="flex-grow-1">{{ total.title }}</div>
+                                        <div class="flex-grow-1">{{ total.title | e }}</div>
                                         <div class="flex-shrink-0" style="font-weight: bold; color: var(--primary-color);">{{ total.value_string }}</div>
                                     </div>
                                 {% endif %}
@@ -62,7 +62,7 @@
                             {% if safeget(store, 'settings.general.availability.closed_now') %}
                                 <a href="#" class="btn btn-disabled" aria-disabled="true">{{ _('Complete the donation') }}</a>
                             {% else %}
-                                <a href="/checkout" class="btn btn-primary">{{ _('Complete the donation') }}</a>
+                                <a href="{{ '/checkout' | localized_url }}" class="btn btn-primary">{{ _('Complete the donation') }}</a>
                             {% endif %}
                         </div>
                         <div style="margin-top: 1rem">

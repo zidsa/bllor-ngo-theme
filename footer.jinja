@@ -10,16 +10,16 @@
     <i class="fa-solid fa-location-dot fa-fw"></i>
     <span>
         {{ address.street | e }}<br/>
-        {{ safeget(address, 'city.country.name', '') }}, {{ safeget(address, 'city.name', '') }}, {{ address.district | e }}, {{ address.street | e }}
+        {{ safeget(address, 'city.country.name', '') | e }}, {{ safeget(address, 'city.name', '') | e }}, {{ address.district | e }}, {{ address.street | e }}
     </span>
 {% endmacro %}
 
 {% macro contact_lines() %}
     {% if contact.phone %}
-        <li><a href="tel:{{ contact.phone }}" target="_blank"><i class="fa-solid fa-phone fa-fw"></i><span dir="ltr">{{ contact.phone }}</span></a></li>
+        <li><a href="tel:{{ contact.phone | urlencode }}" target="_blank"><i class="fa-solid fa-phone fa-fw"></i><span dir="ltr">{{ contact.phone | e }}</span></a></li>
     {% endif %}
     {% if contact.email %}
-        <li><a href="mailto:{{ contact.email }}" target="_blank"><i class="fa-solid fa-envelope fa-fw"></i><span>{{ contact.email }}</span></a></li>
+        <li><a href="mailto:{{ contact.email | e }}" target="_blank"><i class="fa-solid fa-envelope fa-fw"></i><span>{{ contact.email | e }}</span></a></li>
     {% endif %}
 {% endmacro %}
 
@@ -32,22 +32,22 @@
           <p>{{ settings.about_us_des | default('', true) | e }}</p>
           <div class="social-media d-flex gap-3 mt-3">
             {% if contact.facebook %}
-              <a href="https://www.facebook.com/{{ contact.facebook }}" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+              <a href="https://www.facebook.com/{{ contact.facebook | urlencode }}" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
             {% endif %}
             {% if contact.instagram %}
-              <a href="https://www.instagram.com/{{ contact.instagram }}" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+              <a href="https://www.instagram.com/{{ contact.instagram | urlencode }}" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
             {% endif %}
             {% if contact.twitter %}
-              <a href="https://twitter.com/{{ contact.twitter }}" target="_blank" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+              <a href="https://twitter.com/{{ contact.twitter | urlencode }}" target="_blank" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
             {% endif %}
             {% if contact.snapchat %}
-              <a href="https://www.snapchat.com/add/{{ contact.snapchat }}" target="_blank" aria-label="Snapchat"><i class="fa-brands fa-snapchat-ghost"></i></a>
+              <a href="https://www.snapchat.com/add/{{ contact.snapchat | urlencode }}" target="_blank" aria-label="Snapchat"><i class="fa-brands fa-snapchat-ghost"></i></a>
             {% endif %}
             {% if contact.tiktok %}
               <a href="https://www.tiktok.com/@{{ contact.tiktok }}" target="_blank" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
             {% endif %}
             {% if contact.website %}
-              <a href="{{ contact.website }}" target="_blank" aria-label="{{ _('Website') }}"><i class="fa-solid fa-earth-asia"></i></a>
+              <a href="{{ contact.website | e }}" target="_blank" aria-label="{{ _('Website') }}"><i class="fa-solid fa-earth-asia"></i></a>
             {% endif %}
           </div>
         </div>
@@ -133,11 +133,11 @@
             {% endif %}
 
             {% if contact.business_center %}
-              <a href="https://eauthenticate.saudibusiness.gov.sa/certificate-details/{{ contact.business_center }}" class="maroof-icon" target="_blank">
+              <a href="https://eauthenticate.saudibusiness.gov.sa/certificate-details/{{ contact.business_center | urlencode }}" class="maroof-icon" target="_blank">
                 <img loading="lazy" class="lazy-img" src="{{ 'business_center.png' | asset_url }}" alt="" width="32" height="40">
                 <div class="text-certificate">
                   <p>{{ _('Saudi Business Center') }}</p>
-                  <span>{{ contact.business_center }}</span>
+                  <span>{{ contact.business_center | e }}</span>
                 </div>
               </a>
             {% endif %}
