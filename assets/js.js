@@ -51,7 +51,7 @@
   // Unit stepper (donation_item).
   $(document).on("click", ".btn-number", function (e) {
     e.preventDefault();
-    var input = $("#" + $(this).attr("data-field"));
+    var input = $(this).closest(".block-qty").find("#" + $(this).attr("data-field"));
     var value = parseInt(toEnglishDigits(input.val()), 10) || 0;
     var min = parseInt(input.attr("min"), 10) || 1;
     var max = parseInt(input.attr("max"), 10) || Infinity;
@@ -63,9 +63,10 @@
   // Suggested amount buttons fill the amount input they point at.
   $(document).on("click", ".button-price", function () {
     var target = $(this).attr("data-target");
-    $('.button-price[data-target="' + target + '"]').removeClass("active");
+    var scope = $(this).closest(".donation-amount");
+    scope.find(".button-price").removeClass("active");
     $(this).addClass("active");
-    $(target).val($(this).attr("data-price")).trigger("input");
+    scope.find(target).val($(this).attr("data-price")).trigger("input");
   });
 
   // Amount inputs: Arabic digits become English, and the amount is capped at what is

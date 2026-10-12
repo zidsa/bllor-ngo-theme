@@ -41,14 +41,24 @@
     });
   }
 
+  // The amount (or unit count) input that belongs to a button. A project can appear in
+  // several cards on one page, so look inside the button's own card or form first.
+  function inputFor(button) {
+    var scope = button.closest("[data-donation-product-id], form");
+    var selector = button.getAttribute("data-input");
+    return (scope && scope.querySelector(selector)) || document.querySelector(selector);
+  }
+
   // Reads and validates the amount (or unit count) for a donation button.
   function readQuantity(button) {
-    var input = document.querySelector(button.getAttribute("data-input"));
+    var input = inputFor(button);
     var quantity = input ? parseInt(toEnglishDigits(input.value), 10) : 1;
     if (!quantity || quantity <= 0) {
       toast(t("enterAmount"), true);
       return null;
     }
+    // The product form is read by the SDK, which does not understand Arabic digits.
+    if (input) input.value = quantity;
     var max = input && parseInt(input.getAttribute("data-max") || input.getAttribute("max"), 10);
     if (max && quantity > max) {
       input.value = max;
@@ -154,7 +164,7 @@
           })
           .then(function (added) {
             if (added && !window.checkout_dialog && !window.checkoutDialogOpenBuyNow) {
-              window.location.href = "/checkout";
+              window.location.href = document.body.getAttribute("data-checkout-url") || "/checkout";
             }
           })
       ).catch(function () {});

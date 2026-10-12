@@ -5,7 +5,8 @@
 {% set is_item = product.product_class == 'donation_item' %}
 {% set pct = meta.project_progress_percentage if is_project else meta.progress_percentage %}
 {% set can_donate = meta.is_open_donation or meta.has_remaining_amounts or meta.has_remaining_units %}
-{% set is_complete = pct == 100 or not can_donate %}
+{# Only donation products can be finished; any other product is always buyable. #}
+{% set is_complete = (is_project or is_item) and (pct == 100 or not can_donate) %}
 {% set needs_details = product.has_options or product.has_fields %}
 {% set product_url = url_for('product_details', slug=product.slug) %}
 {% set input_id = 'quantity-' ~ product.id %}

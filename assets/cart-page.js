@@ -79,7 +79,7 @@
       if (window.auth_dialog && window.auth_dialog.open) {
         window.auth_dialog.open();
       } else {
-        window.location.href = "/auth/login?redirect_to=" + encodeURIComponent(window.location.pathname + "?gift=1");
+        window.location.href = (document.body.getAttribute("data-login-url") || "/auth/login") + "?redirect_to=" + encodeURIComponent(window.location.pathname + "?gift=1");
       }
       return;
     }

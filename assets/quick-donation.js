@@ -57,7 +57,7 @@
     window.bllorCart
       .addToCart(product.id, amount)
       .then(function () {
-        window.location.href = "/checkout";
+        window.location.href = document.body.getAttribute("data-checkout-url") || "/checkout";
       })
       .catch(function () {})
       .finally(function () {

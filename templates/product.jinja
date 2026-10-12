@@ -15,8 +15,8 @@
 {% set gift_enabled = safeget(store, 'settings.checkout.gift_order_settings.is_gift_order_enabled', '0') == '1' %}
 {% set images = safeget(product, 'selected_product.images') or product.images or [] %}
 {% set input_id = 'product-quantity' %}
-<div class="container" data-donation-page>
-    <div class="page-content">
+<div class="container">
+    <div class="page-content" data-donation-page>
         {% with title = product.name, crumbs = [] %}
             {% include 'components/breadcrumb.jinja' %}
         {% endwith %}
@@ -37,7 +37,7 @@
                                     {% for image in images %}
                                         <div class="swiper-slide">
                                             <a class="image-link">
-                                                <img src="{{ image.image.large }}" alt="{{ image.alt_text or product.name | e }}" {{ 'loading="lazy"' if not loop.first }}>
+                                                <img src="{{ image.image.large }}" alt="{{ (image.alt_text or product.name) | e }}" {{ 'loading="lazy"' if not loop.first }}>
                                             </a>
                                         </div>
                                     {% endfor %}
@@ -155,6 +155,25 @@
 
 {% block footer_scripts %}
 <script>
+    // Called by Vitrin's product.js when the donor picks another variant: the form must
+    // submit that variant, and an unavailable variant cannot be donated to.
+    window.productOptionsChanged = function (selected) {
+        var buttons = document.querySelector("#product-form .product-buttons");
+        var available = !!selected && !selected.unavailable && selected.in_stock !== false;
+        if (buttons) buttons.classList.toggle("d-none", !available);
+        if (!selected) return;
+        var id = document.querySelector("#product-form #product-id");
+        if (id) id.value = selected.id;
+        var price = document.querySelector("#product-form .price-product span");
+        if (price && selected.formatted_price) price.textContent = selected.formatted_price;
+        var units = document.querySelector("#product-form .block-qty input");
+        if (units && !selected.is_infinite && selected.quantity > 0) {
+            var max = Math.min(parseInt(units.getAttribute("max"), 10) || Infinity, selected.quantity);
+            units.setAttribute("max", max);
+            if (parseInt(units.value, 10) > max) units.value = max;
+        }
+    };
+
     document.addEventListener("DOMContentLoaded", function () {
         new Swiper("#product-images", {
             navigation: { nextEl: "#swiper-product-next", prevEl: "#swiper-product-prev" },
