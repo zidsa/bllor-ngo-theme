@@ -1,0 +1,11 @@
+{# Expects `share_url` and `share_name`. #}
+<div class="dropup-center dropup floating-action-button">
+    <button type="button" class="btn btn-link dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="{{ _('Share') }}">
+        <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ _('Share') }}"><i class="icon-svg icon-share"></i></span>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-right animate slideIn">
+        <li><button type="button" data-copy-url="{{ share_url }}" aria-label="{{ _('Copy link') }}"><i class="fa-regular fa-copy"></i></button></li>
+        <li><a href="https://twitter.com/intent/tweet?text={{ (share_name ~ ': ' ~ share_url) | urlencode }}" target="_blank" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a></li>
+        <li><a href="https://api.whatsapp.com/send?text={{ (_('Check out this donation opportunity') ~ ': ' ~ share_name ~ ' ' ~ share_url) | urlencode }}" target="_blank" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a></li>
+    </ul>
+</div>

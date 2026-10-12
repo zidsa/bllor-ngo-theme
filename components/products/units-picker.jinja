@@ -1,0 +1,21 @@
+{# Quantity stepper for donation_item products (each unit has its own price).
+   Expects `input_id`. #}
+{% set meta = product.meta or {} %}
+{% set max_quantity = safeget(product, 'purchase_restrictions.max_quantity_per_cart') or meta.remaining_units or 100 %}
+{% if meta.remaining_units and max_quantity > meta.remaining_units %}{% set max_quantity = meta.remaining_units %}{% endif %}
+<div class="qty-product">
+    <div class="d-flex justify-content-between">
+        <div class="qty">
+            <p class="c-title">{{ _('Units') }}</p>
+            <div class="block-qty">
+                <button type="button" class="btn-number" data-type="plus" data-field="{{ input_id }}" aria-label="+"><i class="fa-solid fa-plus"></i></button>
+                <input type="text" inputmode="numeric" id="{{ input_id }}" name="{{ input_id }}" value="1" min="1" max="{{ max_quantity }}">
+                <button type="button" class="btn-number" data-type="minus" data-field="{{ input_id }}" aria-label="-"><i class="fa-solid fa-minus"></i></button>
+            </div>
+        </div>
+        <div class="price">
+            <p class="c-title">{{ _('Unit price') }}</p>
+            <div class="price-product"><span>{{ product.formatted_price }}</span></div>
+        </div>
+    </div>
+</div>

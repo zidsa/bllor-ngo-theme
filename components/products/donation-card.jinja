@@ -1,0 +1,72 @@
+{# One donation opportunity in a grid. Expects `product`. #}
+{% if product %}
+{% set meta = product.meta or {} %}
+{% set is_project = product.product_class == 'crowdfunding_project' %}
+{% set is_item = product.product_class == 'donation_item' %}
+{% set pct = meta.project_progress_percentage if is_project else meta.progress_percentage %}
+{% set can_donate = meta.is_open_donation or meta.has_remaining_amounts or meta.has_remaining_units %}
+{% set is_complete = pct == 100 or not can_donate %}
+{% set needs_details = product.has_options or product.has_fields %}
+{% set product_url = url_for('product_details', slug=product.slug) %}
+{% set input_id = 'quantity-' ~ product.id %}
+{% set gift_enabled = safeget(store, 'settings.checkout.gift_order_settings.is_gift_order_enabled', '0') == '1' %}
+<div class="block-product {{ 'product-item-out-of-stock' if not is_project and not is_item and not product.is_infinite and product.quantity is not none and product.quantity <= 0 }}"
+     data-donation-product-id="{{ product.id }}">
+    <div id="norma-product-{{ product.id }}" class="norma-product {{ 'without-details' if is_complete }}">
+        <a class="thumb" href="{{ product_url }}">
+            {% if is_project %}
+                <span class="label product-card-bundle-offer product-card-donation-message"
+                      data-donation-window
+                      data-start="{{ safeget(product, 'purchase_restrictions.availability_period_start', '') or '' }}"
+                      data-end="{{ safeget(product, 'purchase_restrictions.availability_period_end', '') or '' }}"></span>
+            {% endif %}
+            <span class="label data-donation-remaining-amount-exceed-message"></span>
+            {% if product.images %}
+                <img src="{{ image_url(product.images[0].image.large, w=500, q=85, f='auto') | trim }}" alt="{{ product.name | e }}" loading="lazy">
+            {% else %}
+                <img src="{{ 'product-img.svg' | asset_url }}" alt="{{ product.name | e }}" loading="lazy">
+            {% endif %}
+            <div class="content-thumb">
+                <h3>{{ product.name | e }}</h3>
+            </div>
+        </a>
+
+        {% if is_project or is_item %}
+            {% include 'components/products/donation-progress.jinja' %}
+        {% endif %}
+
+        <div data-donation-form>
+            {% if can_donate and not is_complete %}
+                {% if is_item %}
+                    {% include 'components/products/units-picker.jinja' %}
+                {% else %}
+                    {% set max_amount = meta.project_remaining_amount if is_project else none %}
+                    {% include 'components/products/donation-amount.jinja' %}
+                {% endif %}
+            {% endif %}
+            <div class="actions">
+                {% if is_complete %}
+                    <div class="w-100 text-center">
+                        <a class="btn btn-link view-det" href="{{ product_url }}">{{ _('View details') }}</a>
+                    </div>
+                {% elif needs_details %}
+                    <div class="w-100">
+                        <a class="btn btn-primary w-100" href="{{ product_url }}">{{ _('Donate now') }}</a>
+                    </div>
+                {% else %}
+                    <button class="btn btn-link" type="button" data-donation-add="{{ product.id }}" data-input="#{{ input_id }}" aria-label="{{ _('Add to cart') }}"><i class="icon-svg icon-addcart"></i></button>
+                    <div class="w-50">
+                        <button class="btn btn-primary w-100" type="button" data-donation-now="{{ product.id }}" data-input="#{{ input_id }}">{{ _('Donate now') }}</button>
+                    </div>
+                    {% if gift_enabled %}
+                        <button class="btn btn-link" type="button" data-donation-gift="{{ product.id }}" data-input="#{{ input_id }}" aria-label="{{ _('Gift the donation') }}"><i class="icon-svg icon-gift"></i></button>
+                    {% endif %}
+                {% endif %}
+                {% with share_url = product_url, share_name = product.name %}
+                    {% include 'components/products/share.jinja' %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

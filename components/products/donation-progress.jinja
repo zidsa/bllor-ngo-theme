@@ -1,0 +1,48 @@
+{# Collected / remaining figures and the progress bar for one donation product.
+   project_collected_amount already includes offline (external) donations, so it is
+   shown as is. The explicit amounts are null when the merchant hides them. #}
+{% set meta = product.meta or {} %}
+{% set is_project = product.product_class == 'crowdfunding_project' %}
+{% set pct = meta.project_progress_percentage if is_project else meta.progress_percentage %}
+{% set show_figures = (meta.show_collected_amount if is_project else meta.show_purchased_units) and not meta.is_open_donation %}
+{% set show_bar = meta.show_progress_bar and pct is not none and not meta.is_open_donation %}
+<div class="progress-product {{ '' if show_figures or show_bar else 'p-0' }}">
+    {% if show_figures %}
+        <div class="d-flex justify-content-between">
+            {% if is_project %}
+                {% if meta.project_collected_amount is not none %}
+                    <div>
+                        <p>{{ _('Collected') }}</p>
+                        <p class="large">{{ meta.project_collected_amount }} {{ product.currency_symbol }}</p>
+                    </div>
+                {% endif %}
+                {% if meta.project_remaining_amount is not none %}
+                    <div>
+                        <p>{{ _('Remaining amount') }}</p>
+                        <p class="large">{{ meta.project_remaining_amount }} {{ product.currency_symbol }}</p>
+                    </div>
+                {% endif %}
+            {% else %}
+                {% if meta.purchased_units is not none %}
+                    <div>
+                        <p>{{ _('Supported') }}</p>
+                        <p class="large">{{ meta.purchased_units }} {{ _('units') }}</p>
+                    </div>
+                {% endif %}
+                {% if meta.remaining_units is not none %}
+                    <div>
+                        <p>{{ _('Remaining') }}</p>
+                        <p class="large">{{ meta.remaining_units }} {{ _('units') }}</p>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if show_bar %}
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: {{ [pct, 10] | max }}%" aria-valuenow="{{ pct }}" aria-valuemin="0" aria-valuemax="100">
+                {% if meta.show_progress_percentage %}{{ pct }}%{% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
