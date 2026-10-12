@@ -61,6 +61,7 @@
     {% endif %}
 </head>
 <body data-template="{{ session.template }}"
+      data-cart-url="{{ url_for('cart_page') }}"
       data-cartsuccess="{{ _('Donation added successfully!') }}"
       class="{{ 'rtl' if is_rtl else 'ltr' }} {{ 'home-page' if session.template == 'home' else 'not-home' }}">
 

@@ -1,0 +1,162 @@
+{% extends "layout.jinja" %}
+
+{% block top_links %}
+    <link rel="stylesheet" href="{{ 'product-details.css' | asset_url }}">
+{% endblock %}
+
+{% block content %}
+{% set meta = product.meta or {} %}
+{% set is_project = product.product_class == 'crowdfunding_project' %}
+{% set is_item = product.product_class == 'donation_item' %}
+{% set is_donation = is_project or is_item %}
+{% set can_donate = meta.is_open_donation or meta.has_remaining_amounts or meta.has_remaining_units %}
+{% set pct = meta.project_progress_percentage if is_project else meta.progress_percentage %}
+{% set is_complete = is_donation and (pct == 100 or not can_donate) %}
+{% set gift_enabled = safeget(store, 'settings.checkout.gift_order_settings.is_gift_order_enabled', '0') == '1' %}
+{% set images = safeget(product, 'selected_product.images') or product.images or [] %}
+{% set input_id = 'product-quantity' %}
+<div class="container" data-donation-page>
+    <div class="page-content">
+        {% with title = product.name, crumbs = [] %}
+            {% include 'components/breadcrumb.jinja' %}
+        {% endwith %}
+
+        <div class="bg-inside">
+            <div class="row justify-content-center">
+                <div class="col-lg-5">
+                    <div class="block-product custom-top-bottom product--single-page">
+                        <div class="thumb {{ 'd-none' if not images }}">
+                            {% if is_project %}
+                                <span class="label product-card-bundle-offer product-card-donation-message"
+                                      data-donation-window
+                                      data-start="{{ safeget(product, 'purchase_restrictions.availability_period_start', '') or '' }}"
+                                      data-end="{{ safeget(product, 'purchase_restrictions.availability_period_end', '') or '' }}"></span>
+                            {% endif %}
+                            <div class="swiper {{ 'has-images' if images | length > 1 else 'not-has-images' }}" id="product-images">
+                                <div class="swiper-wrapper">
+                                    {% for image in images %}
+                                        <div class="swiper-slide">
+                                            <a class="image-link">
+                                                <img src="{{ image.image.large }}" alt="{{ image.alt_text or product.name | e }}" {{ 'loading="lazy"' if not loop.first }}>
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="swiper-button-next slider-arrow" id="swiper-product-next"><i class="fa-solid fa-chevron-right"></i></div>
+                                <div class="swiper-button-prev slider-arrow" id="swiper-product-prev"><i class="fa-solid fa-chevron-left"></i></div>
+                                <div class="swiper-pagination"></div>
+                            </div>
+                        </div>
+                        <div class="mt-2 d-flex justify-content-between">
+                            {% if product.sold_products_count %}
+                                <span class="badge product-badge"><i class="fa-solid fa-money-bill-trend-up me-1"></i>{{ _('No. of donations') }} {{ product.sold_products_count }}</span>
+                            {% endif %}
+                        </div>
+                        <h3 class="product-title">{{ product.name | e }}</h3>
+                        {% if product.short_description %}
+                            <div class="short-desc mb-2">{{ product.short_description | safe }}</div>
+                        {% endif %}
+                        {% if is_donation %}
+                            {% include 'components/products/donation-progress.jinja' %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <form id="product-form" onsubmit="return false">
+                        <input type="hidden" id="product-id" name="product_id" value="{{ safeget(product, 'selected_product.id') or product.id }}">
+                        <div class="block-product custom-res-bottom">
+                            <span class="label data-donation-remaining-amount-exceed-message"></span>
+                            {% if is_complete %}
+                                <p class="text-center text-ended">{{ _('This opportunity has ended') }}</p>
+                            {% else %}
+                                <div data-donation-form>
+                                    <p class="sub-title">{{ _('Donation amount') }}</p>
+                                    {% if is_item %}
+                                        {% include 'components/products/units-picker.jinja' %}
+                                    {% elif is_project %}
+                                        {% set max_amount = meta.project_remaining_amount %}
+                                        {% include 'components/products/donation-amount.jinja' %}
+                                    {% else %}
+                                        <input type="hidden" id="product-quantity" value="1">
+                                    {% endif %}
+
+                                    <div class="content-options">
+                                        <div class="size-box">
+                                            {% if product.has_options and product.options %}
+                                                {% with options=product.options, product=product, style='list' %}
+                                                    {% include 'vitrin:v2/products/options/variant_options.jinja' %}
+                                                {% endwith %}
+                                            {% endif %}
+                                            {% if product.custom_input_fields %}
+                                                {% with product=product %}
+                                                    {% include 'vitrin:v2/products/fields/custom_input_fields.jinja' %}
+                                                {% endwith %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <div class="actions product-buttons">
+                                        <button class="btn btn-link" type="button" data-donation-add="{{ product.id }}" data-form="product-form" data-input="#{{ input_id }}" aria-label="{{ _('Add to cart') }}"><i class="icon-svg icon-addcart"></i></button>
+                                        <div class="w-50">
+                                            <button class="btn btn-primary w-100" type="button" data-donation-now="{{ product.id }}" data-form="product-form" data-input="#{{ input_id }}">{{ _('Donate now') }}</button>
+                                        </div>
+                                        {% if gift_enabled %}
+                                            <button class="btn btn-link" type="button" data-donation-gift="{{ product.id }}" data-form="product-form" data-input="#{{ input_id }}" aria-label="{{ _('Gift the donation') }}"><i class="icon-svg icon-gift"></i></button>
+                                        {% endif %}
+                                        {% with share_url = url_for('product_details', slug=product.slug), share_name = product.name %}
+                                            {% include 'components/products/share.jinja' %}
+                                        {% endwith %}
+                                    </div>
+                                    <div style="margin-top: 1rem">
+                                        {% include 'vitrin:checkout/apple-pay-quick-checkout.jinja' %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="my-5">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{ _('More details') }}</h3>
+            </div>
+            <div class="card-body">
+                {% if product.description %}
+                    {{ product.description | safe }}
+                {% else %}
+                    <p>{{ _('There are no details') }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if product.related_products %}
+        <section class="section">
+            <h3 class="section-title text-center">{{ _('You may also like') }}</h3>
+            <div class="row">
+                {% for product in product.related_products %}
+                    <div class="col-md-5 mb-3">
+                        {% include 'components/products/donation-card.jinja' %}
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block footer_scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        new Swiper("#product-images", {
+            navigation: { nextEl: "#swiper-product-next", prevEl: "#swiper-product-prev" },
+            pagination: { clickable: true, el: ".swiper-pagination" },
+            loop: {{ 'true' if images | length > 1 else 'false' }}
+        });
+    });
+</script>
+{% endblock %}

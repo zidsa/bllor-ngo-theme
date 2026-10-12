@@ -95,13 +95,23 @@
       .catch(function () {});
   }
 
-  function addToCart(productId, quantity) {
+  // On the product page the payload is read from #product-form (product id, amount and
+  // custom fields); on cards it is the product id and the amount.
+  function payloadFor(button, productId, quantity) {
+    var form = button && button.getAttribute("data-form");
+    return form ? { form_id: form } : { product_id: productId, quantity: quantity };
+  }
+
+  function addToCart(productId, quantity, button) {
     return waitForZid().then(function (zid) {
-      return zid.cart.addProduct(
-        { product_id: productId, quantity: quantity },
-        { showErrorNotification: true }
-      );
+      return zid.cart.addProduct(payloadFor(button, productId, quantity), {
+        showErrorNotification: true,
+      });
     });
+  }
+
+  function cartUrl(query) {
+    return (document.body.getAttribute("data-cart-url") || "/cart") + (query || "");
   }
 
   window.bllorCart = {
@@ -125,28 +135,35 @@
     if (add) {
       withSpinner(
         button,
-        addToCart(button.getAttribute("data-donation-add"), quantity).then(function (response) {
+        addToCart(button.getAttribute("data-donation-add"), quantity, button).then(function (response) {
           setCartBadge(response && response.cart_items_quantity);
           toast(t("addedToCart"));
         })
       ).catch(function () {});
     } else if (now) {
-      // Empties the cart, adds this donation and opens checkout (or login for guests).
+      // Empties the cart and adds this donation. buyNow opens the login or checkout
+      // dialog when the store uses them; otherwise go to the checkout page.
       withSpinner(
         button,
-        waitForZid().then(function (zid) {
-          return zid.cart.buyNow(
-            { product_id: button.getAttribute("data-donation-now"), quantity: quantity },
-            { showErrorNotification: true }
-          );
-        })
+        waitForZid()
+          .then(function (zid) {
+            return zid.cart.buyNow(
+              payloadFor(button, button.getAttribute("data-donation-now"), quantity),
+              { showErrorNotification: true }
+            );
+          })
+          .then(function (added) {
+            if (added && !window.checkout_dialog && !window.checkoutDialogOpenBuyNow) {
+              window.location.href = "/checkout";
+            }
+          })
       ).catch(function () {});
     } else if (gift) {
       // Gift details are collected by Vitrin's gift dialog on the cart page.
       withSpinner(
         button,
-        addToCart(button.getAttribute("data-donation-gift"), quantity).then(function () {
-          window.location.href = "/cart?gift=1";
+        addToCart(button.getAttribute("data-donation-gift"), quantity, button).then(function () {
+          window.location.href = cartUrl("?gift=1");
         })
       ).catch(function () {});
     }

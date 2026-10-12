@@ -1,0 +1,10 @@
+{# Page title and breadcrumb. Expects `title` and `crumbs`, a list of {name, url}
+   between Home and the current page. #}
+<h1 class="single-title">{{ title | e }}</h1>
+<ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ url_for('home') }}"><i class="icon-svg icon-home me-2"></i> {{ _('Home') }}</a></li>
+    {% for crumb in crumbs %}
+        <li class="breadcrumb-item"><a href="{{ crumb.url }}">{{ crumb.name | e }}</a></li>
+    {% endfor %}
+    <li class="breadcrumb-item active" aria-current="page">{{ title | e }}</li>
+</ul>
