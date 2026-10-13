@@ -31,7 +31,22 @@
   white-space: nowrap;
 }
 
-/* Footer */
+/* Footer: the legacy col-md-3 columns are kept; only the ones with content are rendered,
+   and they share the row equally. */
+.footer .footer-columns {
+  align-items: flex-start !important;
+}
+@media (min-width: 768px) {
+  .footer .footer-columns > .col-md-3 {
+    flex: 1 1 0;
+    width: auto;
+  }
+}
+@media (max-width: 767.98px) {
+  .footer .footer-columns > :first-child {
+    margin-top: 0 !important;
+  }
+}
 .footer .container {
   padding: 28px 24px !important;
 }
@@ -291,7 +306,12 @@
   color: #3d393e;
 }
 
-/* Amount: suggestions on one row, any other amount below */
+/* Amount: suggestions on one row, any other amount below. The legacy row/col-6 markup
+   is kept, so each column takes the full width instead. */
+.donation-amount > .row > .col-6 {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
 .donation-amount .form-label {
   color: #4e4a4f;
   font-size: 14px;
@@ -299,9 +319,8 @@
   margin-bottom: 6px;
 }
 .donation-amount .donation-amount-options {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 8px !important;
+  margin-bottom: 4px;
 }
 .donation-amount button {
   flex: 1 1 0;

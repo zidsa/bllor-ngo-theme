@@ -41,9 +41,9 @@
   {% if has_about or has_links or has_apps or has_contact or payment_methods %}
   <footer class="footer">
     <div class="container py-3 px-2 px-md-4">
-      <div class="row g-4">
+      <div class="row align-items-center footer-columns">
         {% if has_about %}
-        <div class="col-md">
+        <div class="col-md-3">
           <h3 class="footer-title">{{ settings.about_us_title | default('', true) | e }}</h3>
           <p>{{ settings.about_us_des | default('', true) | e }}</p>
           <div class="social-media d-flex gap-3 mt-3">
@@ -69,7 +69,7 @@
         </div>
         {% endif %}
         {% if has_links %}
-        <div class="col-md">
+        <div class="col-md-3 mt-4 mt-md-0">
             <h3 class="footer-title">{{ settings.links_1_title | default('', true) | e }}</h3>
             <ul class="footer-menu">
               {% for item in footer_links %}
@@ -79,7 +79,7 @@
         </div>
         {% endif %}
         {% if has_apps %}
-          <div class="col-md order-md-last">
+          <div class="col-md-3 order-md-4 order-md-last mt-4 mt-md-0">
             <div class="d-flex flex-wrap justify-content-center justify-content-md-end gap-2">
               {% if apps.ios_app_id %}
                 <a target="_blank" href="https://apps.apple.com/app/id{{ apps.ios_app_id }}"><img src="{{ 'appstore.svg' | asset_url }}" alt="App Store"></a>
@@ -91,7 +91,7 @@
           </div>
         {% endif %}
         {% if has_contact %}
-        <div class="col-md">
+        <div class="col-md-3 mt-4 mt-md-0 order-3">
           {% if address.show_location %}
             <h3 class="footer-title">{{ _('Our location') }}</h3>
             <ul class="footer-menu mb-0">
@@ -107,7 +107,7 @@
         </div>
         {% endif %}
         {% if payment_methods %}
-        <div class="col-md">
+        <div class="col-md-3 mt-4 mt-md-0 order-3">
             <h3 class="footer-title">{{ _('Payment options') }}</h3>
             <div class="footer-menu d-flex gap-2 flex-wrap payment-method-list align-items-center">
               {% for method in payment_methods %}
