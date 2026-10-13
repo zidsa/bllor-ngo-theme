@@ -52,6 +52,9 @@
                                 {% endif %}
                             {% endfor %}
                         </div>
+                        {% if gift_enabled and not can_gift %}
+                            <span class="d-none" data-gift-one-project></span>
+                        {% endif %}
                         {% if gift_enabled and can_gift %}
                             <div class="mt-3">
                                 <button type="button" class="btn btn-outline-primary w-100" data-open-gift>
