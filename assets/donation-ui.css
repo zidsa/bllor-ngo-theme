@@ -1,0 +1,32 @@
+/*
+ * Design refinements on top of the legacy bllor-ngo styles in style.css.
+ * The legacy class names stay as they are (merchant custom CSS targets them), so this
+ * file only adds rules. Colours come from the store's primary colour.
+ */
+
+/* Header */
+.header {
+  border-bottom: 1px solid #f0eef0;
+}
+.header .header-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  text-decoration: none;
+}
+.header .header-logo .logo-img {
+  max-height: 56px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+.header .logo-text {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--headerTextColor);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
