@@ -238,3 +238,39 @@ msgstr "وحدة"
 
 msgid "A donation gift can include one project only. Remove the other projects to send it as a gift."
 msgstr "يمكن إهداء التبرع لمشروع واحد فقط. احذف المشاريع الأخرى لإرساله كهدية."
+
+msgid "Every donation makes a difference"
+msgstr "كل تبرع يصنع أثراً"
+
+msgid "Choose a cause you care about and donate in a few easy steps."
+msgstr "اختر الفرصة التي تهمك وتبرّع بخطوات سهلة."
+
+msgid "Browse donation opportunities"
+msgstr "تصفح فرص التبرع"
+
+msgid "Latest donation opportunities"
+msgstr "أحدث فرص التبرع"
+
+msgid "View all opportunities"
+msgstr "عرض جميع الفرص"
+
+msgid "How to donate"
+msgstr "كيف تتبرع؟"
+
+msgid "Choose an opportunity"
+msgstr "اختر فرصة التبرع"
+
+msgid "Browse the projects and pick the one closest to your heart."
+msgstr "تصفّح المشاريع واختر الأقرب إلى قلبك."
+
+msgid "Set the amount"
+msgstr "حدد مبلغ التبرع"
+
+msgid "Pick a suggested amount or enter your own."
+msgstr "اختر مبلغاً مقترحاً أو أدخل المبلغ الذي تريده."
+
+msgid "Donate securely"
+msgstr "تبرّع بأمان"
+
+msgid "Complete your donation with secure payment options."
+msgstr "أكمل تبرعك عبر وسائل دفع آمنة."
