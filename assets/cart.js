@@ -169,12 +169,20 @@
           })
       ).catch(function () {});
     } else if (gift) {
-      // Gift details are collected by Vitrin's gift dialog on the cart page.
+      // A donation gift covers one project, as in the old storefront: empty the cart, add
+      // this donation, then Vitrin's gift dialog on the cart page collects the details.
       withSpinner(
         button,
-        addToCart(button.getAttribute("data-donation-gift"), quantity, button).then(function () {
-          window.location.href = cartUrl("?gift=1");
-        })
+        waitForZid()
+          .then(function (zid) {
+            return zid.cart.empty();
+          })
+          .then(function () {
+            return addToCart(button.getAttribute("data-donation-gift"), quantity, button);
+          })
+          .then(function () {
+            window.location.href = cartUrl("?gift=1");
+          })
       ).catch(function () {});
     }
   });

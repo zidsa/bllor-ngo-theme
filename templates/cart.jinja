@@ -9,6 +9,8 @@
 {% set gift_enabled = gift_settings.is_gift_order_enabled == '1' %}
 {% set gifting = gifting_state(cart, store) %}
 {% set gift = cart.gift_card_details %}
+{# A donation gift covers one project; a gift already on the cart stays editable. #}
+{% set can_gift = gift or (cart.products | length) <= 1 %}
 <div class="container">
     <div class="page-content">
         <h1 class="single-title">{{ _('Donations cart') }}</h1>
@@ -50,7 +52,7 @@
                                 {% endif %}
                             {% endfor %}
                         </div>
-                        {% if gift_enabled %}
+                        {% if gift_enabled and can_gift %}
                             <div class="mt-3">
                                 <button type="button" class="btn btn-outline-primary w-100" data-open-gift>
                                     <i class="icon-svg icon-gift"></i>
