@@ -30,3 +30,29 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* Footer */
+.footer .container {
+  padding: 28px 24px !important;
+}
+.footer .footer-title {
+  font-weight: 700;
+}
+.footer .footer-menu {
+  padding: 0;
+  margin-bottom: 0;
+}
+.footer .footer-menu li + li {
+  margin-top: 6px;
+}
+.footer .footer-menu .fa-fw {
+  color: var(--primaryColor);
+  margin-inline-end: 6px;
+}
+.footer .payment-method-list img {
+  height: 36px;
+  width: auto;
+  background: #fff;
+  border-radius: 8px;
+  padding: 4px 8px;
+}
