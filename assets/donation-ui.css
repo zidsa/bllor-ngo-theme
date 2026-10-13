@@ -208,7 +208,7 @@
   padding: 3px 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
 }
-.donation-card-title {
+.donation-card-title h3 {
   font-size: 17px;
   line-height: 1.5;
   margin-bottom: 12px;

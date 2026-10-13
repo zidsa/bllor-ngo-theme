@@ -28,7 +28,10 @@
                 <span class="thumb-placeholder" aria-hidden="true"><i class="fa-solid fa-hand-holding-heart"></i></span>
             {% endif %}
         </a>
-        <h3 class="donation-card-title"><a href="{{ product_url }}">{{ product.name | e }}</a></h3>
+        {# Keeps bllor's content-thumb > h3 so migrated custom CSS still matches the title. #}
+        <div class="content-thumb donation-card-title">
+            <h3><a href="{{ product_url }}">{{ product.name | e }}</a></h3>
+        </div>
 
         {% if is_project or is_item %}
             {% include 'components/products/donation-progress.jinja' %}
