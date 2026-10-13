@@ -277,3 +277,6 @@ msgstr "أكمل تبرعك عبر وسائل دفع آمنة."
 
 msgid "Achieved"
 msgstr "نسبة الإنجاز"
+
+msgid "No categories yet"
+msgstr "لا توجد تصنيفات بعد"

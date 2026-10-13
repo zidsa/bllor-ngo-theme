@@ -275,3 +275,26 @@
     padding-top: 8px;
   }
 }
+
+/* Empty states */
+.empty-state {
+  text-align: center;
+  padding: 48px 16px;
+}
+.empty-state-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 16px;
+  border-radius: 50%;
+  font-size: 28px;
+  color: var(--primaryColor);
+  background: color-mix(in srgb, var(--primaryColor) 10%, #fff);
+}
+.empty-state-text {
+  font-size: 18px;
+  color: #4e4a4f;
+  margin-bottom: 20px;
+}
