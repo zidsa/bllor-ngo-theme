@@ -3,7 +3,13 @@
 {% set address = safeget(store, 'settings.general.business_address', {}) or {} %}
 {% set tax = safeget(store, 'settings.general.tax_settings', {}) or {} %}
 {% set apps = safeget(store, 'settings.general.one_signal', {}) or {} %}
-{% set payment_methods = safeget(store, 'settings.checkout.payment_methods', []) or [] %}
+{# Cash on delivery does not apply to donations. The store payload has no method code, and
+   the backend always serves cash on delivery with the static/cod.png icon. #}
+{% set ns_pay = namespace(methods=[]) %}
+{% for method in safeget(store, 'settings.checkout.payment_methods', []) or [] %}
+    {% if 'static/cod.png' not in (method.icon or '') %}{% set ns_pay.methods = ns_pay.methods + [method] %}{% endif %}
+{% endfor %}
+{% set payment_methods = ns_pay.methods %}
 {% set map_url = 'https://maps.google.com/?q=' ~ address.latitude ~ ',' ~ address.longitude if address.latitude else '' %}
 
 {% macro address_line() %}
@@ -23,10 +29,20 @@
     {% endif %}
 {% endmacro %}
 
+{% set footer_links = settings.links_1_links | default([], true) %}
+{% set has_social = contact.facebook or contact.instagram or contact.twitter or contact.snapchat or contact.tiktok or contact.website %}
+{% set has_about = settings.about_us_title or settings.about_us_des or has_social %}
+{% set has_links = not settings.links_1_hide and (settings.links_1_title or footer_links) %}
+{% set has_apps = apps.ios_app_id or apps.android_package_name %}
+{% set has_contact = address.show_location or contact.phone or contact.email %}
+
 <div>
+  {# Only columns with content are rendered, so an unconfigured column leaves no gap. #}
+  {% if has_about or has_links or has_apps or has_contact or payment_methods %}
   <footer class="footer">
     <div class="container py-3 px-2 px-md-4">
-      <div class="row align-items-center">
+      <div class="row align-items-center footer-columns">
+        {% if has_about %}
         <div class="col-md-3">
           <h3 class="footer-title">{{ settings.about_us_title | default('', true) | e }}</h3>
           <p>{{ settings.about_us_des | default('', true) | e }}</p>
@@ -51,17 +67,18 @@
             {% endif %}
           </div>
         </div>
+        {% endif %}
+        {% if has_links %}
         <div class="col-md-3 mt-4 mt-md-0">
-          {% if not settings.links_1_hide %}
             <h3 class="footer-title">{{ settings.links_1_title | default('', true) | e }}</h3>
             <ul class="footer-menu">
-              {% for item in settings.links_1_links | default([], true) %}
+              {% for item in footer_links %}
                 <li><a href="{{ item.url }}">{{ item.title | e }}</a></li>
               {% endfor %}
             </ul>
-          {% endif %}
         </div>
-        {% if apps.ios_app_id or apps.android_package_name %}
+        {% endif %}
+        {% if has_apps %}
           <div class="col-md-3 order-md-4 order-md-last mt-4 mt-md-0">
             <div class="d-flex flex-wrap justify-content-center justify-content-md-end gap-2">
               {% if apps.ios_app_id %}
@@ -73,21 +90,24 @@
             </div>
           </div>
         {% endif %}
+        {% if has_contact %}
         <div class="col-md-3 mt-4 mt-md-0 order-3">
           {% if address.show_location %}
             <h3 class="footer-title">{{ _('Our location') }}</h3>
-            <ul class="footer-menu mb-3">
+            <ul class="footer-menu mb-0">
               <li><a {% if map_url %}target="_blank" href="{{ map_url }}"{% endif %}>{{ address_line() }}</a></li>
               {{ contact_lines() }}
             </ul>
           {% elif contact.phone or contact.email %}
             <h3 class="footer-title">{{ _('Contact us') }}</h3>
-            <ul class="footer-menu mb-3">
+            <ul class="footer-menu mb-0">
               {{ contact_lines() }}
             </ul>
           {% endif %}
-
-          {% if payment_methods %}
+        </div>
+        {% endif %}
+        {% if payment_methods %}
+        <div class="col-md-3 mt-4 mt-md-0 order-3">
             <h3 class="footer-title">{{ _('Payment options') }}</h3>
             <div class="footer-menu d-flex gap-2 flex-wrap payment-method-list align-items-center">
               {% for method in payment_methods %}
@@ -96,11 +116,12 @@
                 </a>
               {% endfor %}
             </div>
-          {% endif %}
         </div>
+        {% endif %}
       </div>
     </div>
   </footer>
+  {% endif %}
   <div class="copyrights">
     <div class="container">
       <div class="row">

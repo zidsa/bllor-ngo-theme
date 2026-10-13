@@ -14,7 +14,13 @@
                 {% include 'components/header/menu.jinja' %}
             </div>
             <div class="col-4 text-center">
-                <a href="{{ url_for('home') }}"><img class="logo-img" src="{{ store.logo }}" alt="{{ store.name | e }}"></a>
+                <a href="{{ url_for('home') }}" class="header-logo">
+                    {% if store.logo %}
+                        <img class="logo-img" src="{{ store.logo }}" alt="{{ store.name | e }}">
+                    {% else %}
+                        <span class="logo-text">{{ store.name | e }}</span>
+                    {% endif %}
+                </a>
             </div>
             <div class="col-4 text-end">
                 <ul class="navbar-menu">

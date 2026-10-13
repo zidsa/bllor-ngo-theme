@@ -29,7 +29,8 @@
                 <h3 class="py-title">{{ _('Payment options') }}</h3>
                 <div class="d-flex flex-row flex-wrap justify-content-center gap-2 align-items-center">
                     {% for method in payment_methods %}
-                        {% if method.icon %}
+                        {# Cash on delivery does not apply to donations; see footer.jinja. #}
+                        {% if method.icon and 'static/cod.png' not in method.icon %}
                             <div class="d-flex align-items-center justify-content-center payment-method-card">
                                 <img class="img-thumbnail" src="{{ method.icon }}" alt="{{ method.name | e }}">
                             </div>
