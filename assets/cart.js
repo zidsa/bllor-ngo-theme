@@ -169,16 +169,30 @@
           })
       ).catch(function () {});
     } else if (gift) {
-      // A donation gift covers one project, as in the old storefront: empty the cart, add
-      // this donation, then Vitrin's gift dialog on the cart page collects the details.
+      // A donation gift covers one project, as in the old storefront: the cart keeps only this
+      // donation, then Vitrin's gift dialog on the cart page collects the details. The donation
+      // is added before the other lines are removed, so a failed add leaves the cart as it was.
       withSpinner(
         button,
         waitForZid()
           .then(function (zid) {
-            return zid.cart.empty();
-          })
-          .then(function () {
-            return addToCart(button.getAttribute("data-donation-gift"), quantity, button);
+            return zid.cart.get().then(function (current) {
+              var previousLines = ((current && current.products) || []).map(function (line) {
+                return String(line.id);
+              });
+              return addToCart(button.getAttribute("data-donation-gift"), quantity, button).then(function (response) {
+                var addedLine = String((response && response.item && response.item.id) || "");
+                return Promise.all(
+                  previousLines.map(function (lineId) {
+                    // The project was already in the cart: keep only the amount gifted now.
+                    if (lineId === addedLine) {
+                      return zid.cart.updateProduct({ product_id: lineId, quantity: quantity }, { showErrorNotification: true });
+                    }
+                    return zid.cart.removeProduct({ product_id: lineId, options: { showErrorNotification: true } });
+                  })
+                );
+              });
+            });
           })
           .then(function () {
             window.location.href = cartUrl("?gift=1");

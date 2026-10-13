@@ -89,7 +89,9 @@
   document.addEventListener("DOMContentLoaded", function () {
     // The gift button is only on the page when the cart can become a gift (one project).
     var canGift = document.querySelector("[data-open-gift]");
-    if (canGift && new URLSearchParams(window.location.search).get("gift") === "1") {
+    var giftRequested = new URLSearchParams(window.location.search).get("gift") === "1";
+    if (giftRequested && !canGift) cart.toast(t("giftOneProject"), true);
+    if (canGift && giftRequested) {
       var tries = 0;
       var timer = setInterval(function () {
         if (window.gift_dialog || ++tries > 40) {
