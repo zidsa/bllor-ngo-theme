@@ -169,12 +169,41 @@
           })
       ).catch(function () {});
     } else if (gift) {
-      // Gift details are collected by Vitrin's gift dialog on the cart page.
+      // A donation gift covers one project, as in the old storefront: the cart keeps only this
+      // donation, then Vitrin's gift dialog on the cart page collects the details. The donation
+      // is saved before the other lines are removed, so a refused donation leaves the cart as it
+      // was. A gift already on the cart belongs to the old lines, so it is cleared too.
+      var giftProductId = button.getAttribute("data-donation-gift");
       withSpinner(
         button,
-        addToCart(button.getAttribute("data-donation-gift"), quantity, button).then(function () {
-          window.location.href = cartUrl("?gift=1");
-        })
+        waitForZid()
+          .then(function (zid) {
+            return zid.cart.get({ showErrorNotification: true }).then(function (current) {
+              var lines = (current && current.products) || [];
+              var sameProject = lines.filter(function (line) {
+                return String(line.product_id) === giftProductId;
+              })[0];
+              var saveDonation = sameProject
+                ? zid.cart.updateProduct({ product_id: sameProject.id, quantity: quantity }, { showErrorNotification: true })
+                : addToCart(giftProductId, quantity, button);
+              return saveDonation
+                .then(function () {
+                  // One at a time: parallel writes to the same cart can race.
+                  return lines.reduce(function (done, line) {
+                    if (line === sameProject) return done;
+                    return done.then(function () {
+                      return zid.cart.removeProduct({ product_id: line.id, options: { showErrorNotification: true } });
+                    });
+                  }, Promise.resolve());
+                })
+                .then(function () {
+                  if (current && current.gift_card_details) return zid.cart.removeGiftCard({ showErrorNotification: true });
+                });
+            });
+          })
+          .then(function () {
+            window.location.href = cartUrl("?gift=1");
+          })
       ).catch(function () {});
     }
   });

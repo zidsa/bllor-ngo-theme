@@ -235,3 +235,6 @@ msgstr "للوحدة"
 
 msgid "units"
 msgstr "وحدة"
+
+msgid "A donation gift can include one project only. Remove the other projects to send it as a gift."
+msgstr "يمكن إهداء التبرع لمشروع واحد فقط. احذف المشاريع الأخرى لإرساله كهدية."

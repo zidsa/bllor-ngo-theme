@@ -87,7 +87,11 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    if (new URLSearchParams(window.location.search).get("gift") === "1") {
+    // The gift button is only on the page when the cart can become a gift (one project).
+    var canGift = document.querySelector("[data-open-gift]");
+    var giftRequested = new URLSearchParams(window.location.search).get("gift") === "1";
+    if (giftRequested && document.querySelector("[data-gift-one-project]")) cart.toast(t("giftOneProject"), true);
+    if (canGift && giftRequested) {
       var tries = 0;
       var timer = setInterval(function () {
         if (window.gift_dialog || ++tries > 40) {
