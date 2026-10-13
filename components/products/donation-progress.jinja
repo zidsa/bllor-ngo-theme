@@ -39,10 +39,16 @@
         </div>
     {% endif %}
     {% if show_bar %}
-        <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width: {{ [pct, 10] | max }}%" aria-valuenow="{{ pct }}" aria-valuemin="0" aria-valuemax="100">
-                {% if meta.show_progress_percentage %}{{ pct }}%{% endif %}
+        {# The percentage sits above the bar: inside a short bar it does not fit. #}
+        {% set pct_label = ('%.1f' | format(pct)).rstrip('0').rstrip('.') %}
+        {% if meta.show_progress_percentage %}
+            <div class="progress-head">
+                <span>{{ _('Achieved') }}</span>
+                <span class="progress-pct">{{ pct_label }}%</span>
             </div>
+        {% endif %}
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: {{ [pct, 100] | min }}%" aria-valuenow="{{ pct }}" aria-valuemin="0" aria-valuemax="100" aria-label="{{ pct_label }}%"></div>
         </div>
     {% endif %}
 </div>

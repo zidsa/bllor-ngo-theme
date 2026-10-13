@@ -25,7 +25,7 @@
             {% if product.images %}
                 <img src="{{ image_url(product.images[0].image.large, w=500, q=85, f='auto') | trim }}" alt="{{ product.name | e }}" loading="lazy">
             {% else %}
-                <img src="{{ 'product-img.svg' | asset_url }}" alt="{{ product.name | e }}" loading="lazy">
+                <span class="thumb-placeholder" aria-hidden="true"><i class="fa-solid fa-hand-holding-heart"></i></span>
             {% endif %}
             <div class="content-thumb">
                 <h3>{{ product.name | e }}</h3>
@@ -63,12 +63,12 @@
                         <a class="btn btn-primary w-100" href="{{ product_url }}">{{ _('Donate now') }}</a>
                     </div>
                 {% else %}
-                    <button class="btn btn-link" type="button" data-donation-add="{{ product.id }}" data-input="#{{ input_id }}" aria-label="{{ _('Add to cart') }}"><i class="icon-svg icon-addcart"></i></button>
+                    <button class="btn btn-link" type="button" data-donation-add="{{ product.id }}" data-input="#{{ input_id }}" aria-label="{{ _('Add to cart') }}" title="{{ _('Add to cart') }}"><i class="icon-svg icon-addcart"></i></button>
                     <div class="w-50">
                         <button class="btn btn-primary w-100" type="button" data-donation-now="{{ product.id }}" data-input="#{{ input_id }}">{{ _('Donate now') }}</button>
                     </div>
                     {% if gift_enabled %}
-                        <button class="btn btn-link" type="button" data-donation-gift="{{ product.id }}" data-input="#{{ input_id }}" aria-label="{{ _('Gift the donation') }}"><i class="icon-svg icon-gift"></i></button>
+                        <button class="btn btn-link" type="button" data-donation-gift="{{ product.id }}" data-input="#{{ input_id }}" aria-label="{{ _('Gift the donation') }}" title="{{ _('Gift the donation') }}"><i class="icon-svg icon-gift"></i></button>
                     {% endif %}
                 {% endif %}
                 {% with share_url = product_url, share_name = product.name %}

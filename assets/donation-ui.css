@@ -150,3 +150,128 @@
     width: 100%;
   }
 }
+
+/* Donation cards and the project page */
+.block-product .thumb-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 130px;
+  font-size: 44px;
+  color: rgba(255, 255, 255, .85);
+  background: linear-gradient(135deg, var(--primaryColor), color-mix(in srgb, var(--primaryColor) 65%, #000));
+}
+.product--single-page .thumb-placeholder {
+  height: 220px;
+  font-size: 64px;
+}
+.product--single-page .thumb-placeholder-wrap {
+  border-radius: 16px;
+}
+.product--single-page .thumb-placeholder-wrap::after {
+  display: none;
+}
+
+.block-product .progress-product .progress-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #6b666c;
+}
+.block-product .progress-product .progress-head .progress-pct {
+  font-weight: 700;
+  color: var(--primaryColor);
+}
+.block-product .progress-product .progress {
+  height: 8px;
+  margin-top: 6px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--primaryColor) 12%, #fff);
+}
+.block-product .progress-product .progress .progress-bar {
+  border-radius: 8px;
+}
+
+.donation-amount .form-label {
+  color: #4e4a4f;
+  font-weight: 500;
+}
+.donation-amount button {
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
+  padding: 6px 4px;
+  color: #3d393e;
+  font-weight: 500;
+  border-color: #e6e3e6;
+}
+.donation-amount button:hover {
+  border-color: var(--primaryColor);
+  color: var(--primaryColor);
+}
+.donation-amount button.active {
+  color: var(--primaryColor);
+  background: color-mix(in srgb, var(--primaryColor) 8%, #fff);
+  font-weight: 700;
+}
+.donation-amount .input-amount {
+  border-color: #e6e3e6;
+  min-height: 40px;
+}
+.donation-amount .input-amount:focus-within {
+  border-color: var(--primaryColor);
+}
+
+.block-product .actions {
+  gap: 8px;
+}
+.block-product .actions > .w-50 {
+  flex: 1 1 auto;
+}
+.block-product .actions .btn-primary {
+  min-height: 44px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+.block-product .actions > .btn-link,
+.block-product .actions .floating-action-button > .btn-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #e6e3e6;
+  border-radius: 12px;
+}
+.block-product .actions > .btn-link:hover,
+.block-product .actions .floating-action-button > .btn-link:hover {
+  border-color: var(--primaryColor);
+}
+.block-product .actions .icon-svg {
+  width: 24px;
+  height: 24px;
+}
+.block-product .actions .btn-link.view-det {
+  width: auto;
+  height: auto;
+  border: 0;
+}
+
+@media (min-width: 992px) {
+  [data-donation-page] .bg-inside {
+    background: transparent;
+    padding: 0;
+  }
+}
+@media (max-width: 991.98px) {
+  /* The two project cards join into one on small screens. */
+  [data-donation-page] .custom-top-bottom {
+    padding-bottom: 4px;
+  }
+  [data-donation-page] .custom-res-bottom {
+    padding-top: 8px;
+  }
+}

@@ -274,3 +274,6 @@ msgstr "تبرّع بأمان"
 
 msgid "Complete your donation with secure payment options."
 msgstr "أكمل تبرعك عبر وسائل دفع آمنة."
+
+msgid "Achieved"
+msgstr "نسبة الإنجاز"
