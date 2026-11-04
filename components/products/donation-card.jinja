@@ -60,9 +60,14 @@
                         <a class="btn btn-link view-det" href="{{ product_url }}">{{ _('View details') }}</a>
                     </div>
                 {% elif needs_details %}
-                    <div class="w-100">
+                    {# Options/fields are chosen on the product page, so every button links there (as in bllor). #}
+                    <a class="btn btn-link" href="{{ product_url }}" aria-label="{{ _('Add to cart') }}" title="{{ _('Add to cart') }}"><i class="icon-svg icon-addcart"></i></a>
+                    <div class="w-50">
                         <a class="btn btn-primary w-100" href="{{ product_url }}">{{ _('Donate now') }}</a>
                     </div>
+                    {% if gift_enabled %}
+                        <a class="btn btn-link" href="{{ product_url }}" aria-label="{{ _('Gift the donation') }}" title="{{ _('Gift the donation') }}"><i class="icon-svg icon-gift"></i></a>
+                    {% endif %}
                 {% else %}
                     <button class="btn btn-link" type="button" data-donation-add="{{ product.id }}" data-input="#{{ input_id }}" aria-label="{{ _('Add to cart') }}" title="{{ _('Add to cart') }}"><i class="icon-svg icon-addcart"></i></button>
                     <div class="w-50">
