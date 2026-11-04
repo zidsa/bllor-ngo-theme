@@ -22,11 +22,22 @@
         {% endwith %}
 
         <div class="bg-inside">
-            <div class="row justify-content-center">
+            <div class="row justify-content-center g-0 g-lg-4">
                 <div class="col-lg-5">
                     <div class="block-product custom-top-bottom product--single-page">
+                        {% if not images %}
+                            <div class="thumb thumb-placeholder-wrap">
+                                {% if is_project %}
+                                    <span class="label product-card-bundle-offer product-card-donation-message"
+                                          data-donation-window
+                                          data-start="{{ safeget(product, 'purchase_restrictions.availability_period_start', '') or '' }}"
+                                          data-end="{{ safeget(product, 'purchase_restrictions.availability_period_end', '') or '' }}"></span>
+                                {% endif %}
+                                <span class="thumb-placeholder" aria-hidden="true"><i class="fa-solid fa-hand-holding-heart"></i></span>
+                            </div>
+                        {% endif %}
                         <div class="thumb {{ 'd-none' if not images }}">
-                            {% if is_project %}
+                            {% if is_project and images %}
                                 <span class="label product-card-bundle-offer product-card-donation-message"
                                       data-donation-window
                                       data-start="{{ safeget(product, 'purchase_restrictions.availability_period_start', '') or '' }}"
@@ -74,7 +85,10 @@
                                     <p class="text-center text-ended d-none" data-donation-closed>{{ _('This opportunity has ended') }}</p>
                                 {% endif %}
                                 <div data-donation-form>
-                                    <p class="sub-title">{{ _('Donation amount') }}</p>
+                                    {# The amount picker labels itself; the unit picker does not. #}
+                                    {% if is_item %}
+                                        <p class="sub-title">{{ _('Donation amount') }}</p>
+                                    {% endif %}
                                     {% if is_item %}
                                         {% include 'components/products/units-picker.jinja' %}
                                     {% elif is_project %}
@@ -100,12 +114,12 @@
                                     </div>
 
                                     <div class="actions product-buttons">
-                                        <button class="btn btn-link" type="button" data-donation-add="{{ product.id }}" data-form="product-form" data-input="#{{ input_id }}" aria-label="{{ _('Add to cart') }}"><i class="icon-svg icon-addcart"></i></button>
+                                        <button class="btn btn-link" type="button" data-donation-add="{{ product.id }}" data-form="product-form" data-input="#{{ input_id }}" aria-label="{{ _('Add to cart') }}" title="{{ _('Add to cart') }}"><i class="icon-svg icon-addcart"></i></button>
                                         <div class="w-50">
                                             <button class="btn btn-primary w-100" type="button" data-donation-now="{{ product.id }}" data-form="product-form" data-input="#{{ input_id }}">{{ _('Donate now') }}</button>
                                         </div>
                                         {% if gift_enabled %}
-                                            <button class="btn btn-link" type="button" data-donation-gift="{{ product.id }}" data-form="product-form" data-input="#{{ input_id }}" aria-label="{{ _('Gift the donation') }}"><i class="icon-svg icon-gift"></i></button>
+                                            <button class="btn btn-link" type="button" data-donation-gift="{{ product.id }}" data-form="product-form" data-input="#{{ input_id }}" aria-label="{{ _('Gift the donation') }}" title="{{ _('Gift the donation') }}"><i class="icon-svg icon-gift"></i></button>
                                         {% endif %}
                                         {% with share_url = url_for('product_details', slug=product.slug), share_name = product.name %}
                                             {% include 'components/products/share.jinja' %}
@@ -123,20 +137,18 @@
         </div>
     </div>
 
-    <div class="my-5">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">{{ _('More details') }}</h3>
-            </div>
-            <div class="card-body">
-                {% if product.description %}
+    {% if product.description %}
+        <div class="my-5">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ _('More details') }}</h3>
+                </div>
+                <div class="card-body">
                     {{ product.description | safe }}
-                {% else %}
-                    <p>{{ _('There are no details') }}</p>
-                {% endif %}
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 
     {% if product.related_products %}
         <section class="section">

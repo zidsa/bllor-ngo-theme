@@ -2,7 +2,12 @@
 
 {% block content %}
     <h1 class="d-none">{{ store.name | e }}</h1>
+    {% set home_sections %}{% template_components %}{% endset %}
     <div class="home">
-        {% template_components %}
+        {% if home_sections | trim %}
+            {{ home_sections }}
+        {% else %}
+            {% include 'components/home-default.jinja' %}
+        {% endif %}
     </div>
 {% endblock %}

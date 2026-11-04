@@ -83,6 +83,13 @@
       message.removeClass("show").text("");
     }
     input.val(value);
+    // A typed amount selects the matching suggestion, or none.
+    input
+      .closest(".donation-amount")
+      .find(".button-price")
+      .each(function () {
+        $(this).toggleClass("active", $(this).attr("data-price") === value);
+      });
   });
 
   $(document).on("click", "[data-copy-url]", function () {

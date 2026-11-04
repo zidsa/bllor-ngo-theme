@@ -1,0 +1,71 @@
+{# Home page for a store that has not added any home sections yet, so a new charity store
+   does not open on an empty page. Adding any section in the theme editor replaces it. #}
+{% set products_url = '/products' | localized_url %}
+<section class="home-hero">
+    <div class="container">
+        <div class="home-hero-box">
+            <div class="home-hero-icon" aria-hidden="true"><i class="fa-solid fa-hand-holding-heart"></i></div>
+            <h2 class="home-hero-title">{{ _('Every donation makes a difference') }}</h2>
+            <p class="home-hero-text">{{ _('Choose a cause you care about and donate in a few easy steps.') }}</p>
+            <div class="home-hero-actions">
+                <a class="btn btn-primary btn-lg" href="{{ products_url }}">{{ _('Browse donation opportunities') }}</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Filled from the opportunities page, so the cards come from the same template as
+   everywhere else (see templates/categories.jinja). Stays hidden when there are none. #}
+<section class="section d-none" data-home-latest="{{ products_url }}">
+    <div class="container">
+        <h3 class="section-title text-center">{{ _('Latest donation opportunities') }}</h3>
+        <div data-home-latest-cards></div>
+        <div class="mt-3 text-center">
+            <a href="{{ products_url }}" class="btn btn-outline-primary">{{ _('View all opportunities') }}</a>
+        </div>
+    </div>
+</section>
+
+<section class="section home-steps">
+    <div class="container">
+        <h3 class="section-title text-center">{{ _('How to donate') }}</h3>
+        <div class="row g-3">
+            {% for icon, title, text in [
+                ('fa-magnifying-glass', _('Choose an opportunity'), _('Browse the projects and pick the one closest to your heart.')),
+                ('fa-coins', _('Set the amount'), _('Pick a suggested amount or enter your own.')),
+                ('fa-shield-heart', _('Donate securely'), _('Complete your donation with secure payment options.')),
+            ] %}
+                <div class="col-md-4">
+                    <div class="home-step">
+                        <span class="home-step-icon" aria-hidden="true"><i class="fa-solid {{ icon }}"></i></span>
+                        <div>
+                            <h4 class="home-step-title">{{ title }}</h4>
+                            <p class="home-step-text">{{ text }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var block = document.querySelector("[data-home-latest]");
+        if (!block) return;
+        fetch(block.getAttribute("data-home-latest"), { credentials: "same-origin" })
+            .then(function (response) { return response.text(); })
+            .then(function (html) {
+                var page = new DOMParser().parseFromString(html, "text/html");
+                var cards = Array.prototype.slice.call(page.querySelectorAll("[data-category-products] .row > .col-lg-4"), 0, 3);
+                if (!cards.length) return;
+                var row = document.createElement("div");
+                row.className = "row justify-content-center";
+                cards.forEach(function (card) { row.appendChild(document.importNode(card, true)); });
+                block.querySelector("[data-home-latest-cards]").appendChild(row);
+                block.classList.remove("d-none");
+                if (window.bllorInitDonationWindows) window.bllorInitDonationWindows(block);
+            })
+            .catch(function () {});
+    });
+</script>

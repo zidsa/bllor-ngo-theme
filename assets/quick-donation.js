@@ -29,14 +29,31 @@
     });
   });
 
+  // The product is found by slug. extension-backend creates it as "zid-quick-donation";
+  // stores enabled before that have the Arabic slug. Its SKU is always "QD.<store id>",
+  // which keeps a merchant product with the same slug from being picked.
+  var slugs = ["zid-quick-donation", "التبرع-السريع"];
+  function findProduct(zid, index) {
+    if (index >= slugs.length) return Promise.reject(new Error("missing quick donation product"));
+    return zid.products
+      .get(slugs[index])
+      .then(function (response) {
+        var found = (response && response.product) || response;
+        if (!found || !found.id || String(found.sku || "").indexOf("QD.") !== 0) throw new Error("not the quick donation product");
+        return found;
+      })
+      .catch(function () {
+        return findProduct(zid, index + 1);
+      });
+  }
+
   window.bllorCart
     .waitForZid()
     .then(function (zid) {
-      return zid.products.get("zid-quick-donation");
+      return findProduct(zid, 0);
     })
-    .then(function (response) {
-      product = (response && response.product) || response;
-      if (!product || !product.id) throw new Error("missing quick donation product");
+    .then(function (found) {
+      product = found;
     })
     .catch(function () {
       container.remove();

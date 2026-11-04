@@ -4,7 +4,7 @@
     <label class="form-label" for="{{ input_id }}">{{ _('Donation amount') }}</label>
     <div class="row g-1">
         <div class="col-6">
-            <div class="h-100 d-flex gap-2 w-100 justify-content-between">
+            <div class="h-100 d-flex gap-2 w-100 justify-content-between donation-amount-options">
                 {% for amount in (donate_money_list | map(attribute='amount') | list if donate_money_list else [10, 50, 100]) %}
                     <button class="button-price {{ 'active' if loop.first }}" type="button" data-target="#{{ input_id }}" data-price="{{ amount }}">{{ amount }}</button>
                 {% endfor %}
@@ -13,7 +13,7 @@
         <div class="col-6">
             <div class="input-amount wrapper--input-amount">
                 <input type="text" inputmode="numeric" value="{{ donate_default_money }}" id="{{ input_id }}" class="donation-input"
-                       {% if max_amount %}data-max="{{ max_amount }}"{% endif %}><span>{{ safeget(store, 'settings.general.currency.symbol', '') }}</span>
+                       aria-label="{{ _('Other amount') }}" {% if max_amount %}data-max="{{ max_amount }}"{% endif %}><span>{{ safeget(store, 'settings.general.currency.symbol', '') }}</span>
             </div>
         </div>
     </div>

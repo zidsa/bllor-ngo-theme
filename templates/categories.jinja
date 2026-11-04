@@ -11,6 +11,12 @@
         </div>
     </div>
     <div class="container">
+        {# Shown when there are no categories, or none of them has opportunities. #}
+        <div class="empty-state {{ 'd-none' if categories }}" data-categories-empty>
+            <span class="empty-state-icon" aria-hidden="true"><i class="fa-solid fa-layer-group"></i></span>
+            <p class="empty-state-text">{{ _('No categories yet') }}</p>
+            <a href="{{ '/products' | localized_url }}" class="btn btn-primary">{{ _('Browse donation opportunities') }}</a>
+        </div>
         {% for category in categories %}
             {% set category_url = url_for('category_details', category_id=category.id, slug=category.slug) %}
             <div class="mb-4 d-none" data-category-block="{{ category_url }}">
@@ -29,8 +35,9 @@
 {% block footer_scripts %}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll("[data-category-block]").forEach(function (block) {
-            fetch(block.getAttribute("data-category-block"), { credentials: "same-origin" })
+        var blocks = document.querySelectorAll("[data-category-block]");
+        var loads = Array.prototype.map.call(blocks, function (block) {
+            return fetch(block.getAttribute("data-category-block"), { credentials: "same-origin" })
                 .then(function (response) { return response.text(); })
                 .then(function (html) {
                     var page = new DOMParser().parseFromString(html, "text/html");
@@ -44,6 +51,11 @@
                     if (window.bllorInitDonationWindows) window.bllorInitDonationWindows(block);
                 })
                 .catch(function () {});
+        });
+        Promise.all(loads).then(function () {
+            if (blocks.length && !document.querySelector("[data-category-block]:not(.d-none)")) {
+                document.querySelector("[data-categories-empty]").classList.remove("d-none");
+            }
         });
     });
 </script>
