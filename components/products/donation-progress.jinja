@@ -38,6 +38,6 @@
         </div>
     {% endif %}
     {% if show_figures and remaining is not none %}
-        <p class="progress-remaining">{{ _('Remaining amount') if is_project else _('Remaining') }}: <strong>{{ remaining }} {{ unit }}</strong></p>
+        <p class="progress-remaining">{{ _('Remaining amount') if is_project else _('Remaining') }} <strong>{{ remaining }} {{ unit }}</strong></p>
     {% endif %}
 </div>

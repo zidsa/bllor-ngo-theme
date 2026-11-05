@@ -30,6 +30,9 @@
                 <div class="custom-field-row">
                     <span class="custom-field-name">{{ (field.label or field.name) | e }}</span>
                     <span class="custom-field-value">{{ (field.value if field.type not in ['CHECKBOX', 'DROPDOWN'] else field.name) | e }}</span>
+                    {% if field.additions_price and field.additions_price | float > 0 %}
+                        <span class="custom-field-price">(+{{ field.additions_price_string }})</span>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>

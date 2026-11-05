@@ -67,7 +67,7 @@
                             {% if safeget(store, 'settings.general.availability.closed_now') %}
                                 <a href="#" class="btn btn-disabled" aria-disabled="true">{{ _('Complete the donation') }}</a>
                             {% else %}
-                                <a href="{{ '/checkout' | localized_url }}" class="btn btn-primary">{{ _('Complete the donation') }}</a>
+                                <a href="{{ '/checkout' | localized_url }}" class="btn btn-primary w-100">{{ _('Complete the donation') }}</a>
                             {% endif %}
                         </div>
                         <div style="margin-top: 1rem">

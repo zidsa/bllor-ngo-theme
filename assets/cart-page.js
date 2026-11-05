@@ -48,26 +48,37 @@
       });
   });
 
+  // Shows a spinner in place of the delete icon until the request succeeds; the page then
+  // reloads with the spinner still showing. A failed request puts the icon back.
+  function removeWithSpinner(link, request) {
+    if (link.getAttribute("aria-busy") === "true") return;
+    var html = link.innerHTML;
+    link.setAttribute("aria-busy", "true");
+    link.classList.add("is-loading");
+    link.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span>';
+    cart
+      .waitForZid()
+      .then(request)
+      .then(reload)
+      .catch(function () {
+        link.innerHTML = html;
+        link.classList.remove("is-loading");
+        link.removeAttribute("aria-busy");
+      });
+  }
+
   document.addEventListener("click", function (event) {
     var remove = event.target.closest("[data-remove-line]");
     var removeGift = event.target.closest("[data-remove-gift]");
     var openGift = event.target.closest("[data-open-gift]");
     if (remove) {
-      cart
-        .waitForZid()
-        .then(function (zid) {
-          return zid.cart.removeProduct({ product_id: remove.getAttribute("data-remove-line"), options: { showErrorNotification: true } });
-        })
-        .then(reload)
-        .catch(function () {});
+      removeWithSpinner(remove, function (zid) {
+        return zid.cart.removeProduct({ product_id: remove.getAttribute("data-remove-line"), options: { showErrorNotification: true } });
+      });
     } else if (removeGift) {
-      cart
-        .waitForZid()
-        .then(function (zid) {
-          return zid.cart.removeGiftCard({ showErrorNotification: true });
-        })
-        .then(reload)
-        .catch(function () {});
+      removeWithSpinner(removeGift, function (zid) {
+        return zid.cart.removeGiftCard({ showErrorNotification: true });
+      });
     } else if (openGift) {
       openGiftDialog();
     }
