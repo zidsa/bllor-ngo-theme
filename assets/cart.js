@@ -120,6 +120,14 @@
     });
   }
 
+  function checkoutAsPopup() {
+    return document.body.getAttribute("data-checkout-popup") === "true";
+  }
+
+  function goToCheckout() {
+    window.location.href = document.body.getAttribute("data-checkout-url") || "/checkout";
+  }
+
   function cartUrl(query) {
     return (document.body.getAttribute("data-cart-url") || "/cart") + (query || "");
   }
@@ -151,22 +159,29 @@
         })
       ).catch(function () {});
     } else if (now) {
-      // Empties the cart and adds this donation. buyNow opens the login or checkout
-      // dialog when the store uses them; otherwise go to the checkout page.
+      // Empties the cart and adds this donation. With store.settings.checkout.show_checkout_as_popup
+      // on, buyNow opens Vitrin's login or checkout dialog. With it off, buyNow would still open
+      // the login dialog for a guest (when the login popup is on) and leave them on this page
+      // after login, so the donation is added here and the donor goes to the checkout page.
+      var payload = payloadFor(button, button.getAttribute("data-donation-now"), quantity);
       withSpinner(
         button,
-        waitForZid()
-          .then(function (zid) {
-            return zid.cart.buyNow(
-              payloadFor(button, button.getAttribute("data-donation-now"), quantity),
-              { showErrorNotification: true }
-            );
-          })
-          .then(function (added) {
-            if (added && !window.checkout_dialog && !window.checkoutDialogOpenBuyNow) {
-              window.location.href = document.body.getAttribute("data-checkout-url") || "/checkout";
-            }
-          })
+        waitForZid().then(function (zid) {
+          if (checkoutAsPopup()) {
+            return zid.cart.buyNow(payload, { showErrorNotification: true }).then(function (added) {
+              // The dialog did not mount: fall back to the checkout page.
+              if (added && !window.checkout_dialog && !window.checkoutDialogOpenBuyNow) goToCheckout();
+            });
+          }
+          return zid.cart
+            .empty()
+            .then(function () {
+              return zid.cart.addProduct(payload, { showErrorNotification: true });
+            })
+            .then(function (response) {
+              if (response && response.item) goToCheckout();
+            });
+        })
       ).catch(function () {});
     } else if (gift) {
       // A donation gift covers one project, as in the old storefront: the cart keeps only this
