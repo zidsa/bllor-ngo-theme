@@ -128,6 +128,53 @@
     window.location.href = document.body.getAttribute("data-checkout-url") || "/checkout";
   }
 
+  function sameId(a, b) {
+    var normalize = function (id) {
+      return String(id || "").replace(/-/g, "").toLowerCase();
+    };
+    return normalize(a) === normalize(b);
+  }
+
+  // Leaves the cart holding only this donation. The donation is saved first and the other lines
+  // are removed after, so a refused donation (e.g. the store needs a location the donor has not
+  // picked yet) leaves the cart as it was. A gift already on the cart belongs to the old lines,
+  // so it is cleared too. Resolves true when the donation was saved.
+  function keepOnlyDonation(zid, productId, quantity, button) {
+    return zid.cart.get({ showErrorNotification: true }).then(function (current) {
+      var lines = (current && current.products) || [];
+      // The cart API returns product ids without dashes; the buttons carry the dashed UUID.
+      var sameProject = lines.filter(function (line) {
+        return sameId(line.product_id, productId);
+      })[0];
+      var saveDonation = sameProject
+        ? zid.cart
+            .updateProduct({ product_id: sameProject.id, quantity: quantity }, { showErrorNotification: true })
+            .then(function () {
+              return true;
+            })
+        : addToCart(productId, quantity, button).then(function (response) {
+            return !!(response && response.item);
+          });
+      return saveDonation.then(function (saved) {
+        if (!saved) return false;
+        // One at a time: parallel writes to the same cart can race.
+        return lines
+          .reduce(function (done, line) {
+            if (line === sameProject) return done;
+            return done.then(function () {
+              return zid.cart.removeProduct({ product_id: line.id, options: { showErrorNotification: true } });
+            });
+          }, Promise.resolve())
+          .then(function () {
+            if (current && current.gift_card_details) return zid.cart.removeGiftCard({ showErrorNotification: true });
+          })
+          .then(function () {
+            return true;
+          });
+      });
+    });
+  }
+
   function cartUrl(query) {
     return (document.body.getAttribute("data-cart-url") || "/cart") + (query || "");
   }
@@ -159,65 +206,38 @@
         })
       ).catch(function () {});
     } else if (now) {
-      // Empties the cart and adds this donation. With store.settings.checkout.show_checkout_as_popup
-      // on, buyNow opens Vitrin's login or checkout dialog. With it off, buyNow would still open
-      // the login dialog for a guest (when the login popup is on) and leave them on this page
-      // after login, so the donation is added here and the donor goes to the checkout page.
-      var payload = payloadFor(button, button.getAttribute("data-donation-now"), quantity);
+      // The cart keeps only this donation. With store.settings.checkout.show_checkout_as_popup
+      // on, buyNow does that and opens Vitrin's login or checkout dialog. With it off, buyNow
+      // would still open the login dialog for a guest (when the login popup is on) and leave them
+      // on this page after login, so the cart is set here and the donor goes to the checkout page.
+      var nowProductId = button.getAttribute("data-donation-now");
       withSpinner(
         button,
         waitForZid().then(function (zid) {
           if (checkoutAsPopup()) {
-            return zid.cart.buyNow(payload, { showErrorNotification: true }).then(function (added) {
-              // The dialog did not mount: fall back to the checkout page.
-              if (added && !window.checkout_dialog && !window.checkoutDialogOpenBuyNow) goToCheckout();
-            });
+            return zid.cart
+              .buyNow(payloadFor(button, nowProductId, quantity), { showErrorNotification: true })
+              .then(function (added) {
+                // The dialog did not mount: fall back to the checkout page.
+                if (added && !window.checkout_dialog && !window.checkoutDialogOpenBuyNow) goToCheckout();
+              });
           }
-          return zid.cart
-            .empty()
-            .then(function () {
-              return zid.cart.addProduct(payload, { showErrorNotification: true });
-            })
-            .then(function (response) {
-              if (response && response.item) goToCheckout();
-            });
+          return keepOnlyDonation(zid, nowProductId, quantity, button).then(function (saved) {
+            if (saved) goToCheckout();
+          });
         })
       ).catch(function () {});
     } else if (gift) {
       // A donation gift covers one project, as in the old storefront: the cart keeps only this
-      // donation, then Vitrin's gift dialog on the cart page collects the details. The donation
-      // is saved before the other lines are removed, so a refused donation leaves the cart as it
-      // was. A gift already on the cart belongs to the old lines, so it is cleared too.
-      var giftProductId = button.getAttribute("data-donation-gift");
+      // donation, then Vitrin's gift dialog on the cart page collects the details.
       withSpinner(
         button,
         waitForZid()
           .then(function (zid) {
-            return zid.cart.get({ showErrorNotification: true }).then(function (current) {
-              var lines = (current && current.products) || [];
-              var sameProject = lines.filter(function (line) {
-                return String(line.product_id) === giftProductId;
-              })[0];
-              var saveDonation = sameProject
-                ? zid.cart.updateProduct({ product_id: sameProject.id, quantity: quantity }, { showErrorNotification: true })
-                : addToCart(giftProductId, quantity, button);
-              return saveDonation
-                .then(function () {
-                  // One at a time: parallel writes to the same cart can race.
-                  return lines.reduce(function (done, line) {
-                    if (line === sameProject) return done;
-                    return done.then(function () {
-                      return zid.cart.removeProduct({ product_id: line.id, options: { showErrorNotification: true } });
-                    });
-                  }, Promise.resolve());
-                })
-                .then(function () {
-                  if (current && current.gift_card_details) return zid.cart.removeGiftCard({ showErrorNotification: true });
-                });
-            });
+            return keepOnlyDonation(zid, button.getAttribute("data-donation-gift"), quantity, button);
           })
-          .then(function () {
-            window.location.href = cartUrl("?gift=1");
+          .then(function (saved) {
+            if (saved) window.location.href = cartUrl("?gift=1");
           })
       ).catch(function () {});
     }
