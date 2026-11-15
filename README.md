@@ -63,10 +63,11 @@ A donation is a product priced at 1 whose quantity is the amount donated.
   donation) and leaves the crowdfunding amount input without a handler.
 - **Gift details use Vitrin's gift dialog** on the cart page, instead of the theme's own
   gift form, which posted to a catalog-only endpoint.
-- **"Donate now" uses `zid.cart.buyNow`**: it empties the cart, adds this donation and opens
-  Vitrin's login or checkout dialog per the store's popup settings. It never redirects to
-  `/checkout`. This covers every "Donate now" button: project cards, the project page and the
-  quick donation widget (`bllorCart.donateNow`).
+- **"Donate now" behaves like Vitrin's "Buy now"**: the button is rendered only when
+  `store.settings.checkout.show_checkout_as_popup` is true (project cards and the project page);
+  otherwise donors use "Add to cart". When shown it uses `zid.cart.buyNow`, which empties the
+  cart, adds this donation and opens Vitrin's login or checkout dialog. It never redirects to
+  `/checkout`. The quick donation widget uses the same flow (`bllorCart.donateNow`).
 - **The categories page reuses the server-rendered card**: each category loads its first
   opportunities from its own category page, instead of rebuilding the card in JavaScript.
 - **Home tabs that point at the legacy `demo_products` placeholder are hidden.** Catalog
