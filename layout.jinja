@@ -66,8 +66,6 @@
       data-checkout-url="{{ '/checkout' | localized_url }}"
       data-login-url="{{ '/auth/login' | localized_url }}"
       data-is-guest="{{ 'true' if session.is_guest else 'false' }}"
-      {# Vitrin mounts its checkout dialog only when both popup settings are on (vitrin:checkout/checkout_dialog.jinja) #}
-      data-checkout-popup="{{ 'true' if safeget(store, 'settings.checkout.show_checkout_as_popup') == true and safeget(store, 'settings.customers.show_login_as_popup') == true else 'false' }}"
       data-cartsuccess="{{ _('Donation added successfully!') }}"
       class="{{ 'rtl' if is_rtl else 'ltr' }} {{ 'home-page' if session.template == 'home' else 'not-home' }}">
 
