@@ -13,6 +13,8 @@
 {% set pct = meta.project_progress_percentage if is_project else meta.progress_percentage %}
 {% set is_complete = is_donation and (pct == 100 or not can_donate) %}
 {% set gift_enabled = safeget(store, 'settings.checkout.gift_order_settings.is_gift_order_enabled', '0') == '1' %}
+{# Like Vitrin's "Buy now": "Donate now" exists only when the store shows checkout as a popup. #}
+{% set donate_now_enabled = safeget(store, 'settings.checkout.show_checkout_as_popup', false) == true %}
 {% set images = safeget(product, 'selected_product.images') or product.images or [] %}
 {% set input_id = 'product-quantity' %}
 <div class="container">
@@ -115,9 +117,11 @@
 
                                     <div class="actions product-buttons">
                                         <button class="btn btn-link" type="button" data-donation-add="{{ product.id }}" data-form="product-form" data-input="#{{ input_id }}" aria-label="{{ _('Add to cart') }}" title="{{ _('Add to cart') }}"><i class="icon-svg icon-addcart"></i></button>
+                                        {% if donate_now_enabled %}
                                         <div class="w-50">
                                             <button class="btn btn-primary w-100" type="button" data-donation-now="{{ product.id }}" data-form="product-form" data-input="#{{ input_id }}">{{ _('Donate now') }}</button>
                                         </div>
+                                        {% endif %}
                                         {% if gift_enabled %}
                                             <button class="btn btn-link" type="button" data-donation-gift="{{ product.id }}" data-form="product-form" data-input="#{{ input_id }}" aria-label="{{ _('Gift the donation') }}" title="{{ _('Gift the donation') }}"><i class="icon-svg icon-gift"></i></button>
                                         {% endif %}
