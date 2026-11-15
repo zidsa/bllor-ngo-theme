@@ -1,6 +1,7 @@
 /*
  * Quick donation widget. The amount is added as the quantity of the store's
- * system-managed "zid-quick-donation" product, then the donor goes to checkout.
+ * system-managed "zid-quick-donation" product through Vitrin's buyNow, which opens its
+ * login or checkout dialog.
  * If the product does not exist (quick donation disabled), the widget is removed.
  */
 (function () {
@@ -71,10 +72,12 @@
     var html = submit.innerHTML;
     submit.disabled = true;
     submit.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span>';
+    // Same flow as the other "Donate now" buttons: Vitrin's buyNow and its checkout popup.
     window.bllorCart
-      .addToCart(product.id, amount)
-      .then(function () {
-        window.location.href = document.body.getAttribute("data-checkout-url") || "/checkout";
+      .donateNow(product.id, amount, submit)
+      .then(function (saved) {
+        // Close the widget so Vitrin's login or checkout dialog is not covered by it.
+        if (saved) document.body.classList.remove("open-quick-donation");
       })
       .catch(function () {})
       .finally(function () {

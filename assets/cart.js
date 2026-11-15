@@ -120,14 +120,6 @@
     });
   }
 
-  function checkoutAsPopup() {
-    return document.body.getAttribute("data-checkout-popup") === "true";
-  }
-
-  function goToCheckout() {
-    window.location.href = document.body.getAttribute("data-checkout-url") || "/checkout";
-  }
-
   function sameId(a, b) {
     var normalize = function (id) {
       return String(id || "").replace(/-/g, "").toLowerCase();
@@ -175,6 +167,19 @@
     });
   }
 
+  // "Donate now" follows Vitrin's checkout popup logic only: buyNow empties the cart, adds this
+  // donation and opens the login or checkout dialog per the store settings. It never redirects.
+  // Resolves true when the donation was saved.
+  function donateNow(productId, quantity, button) {
+    return waitForZid().then(function (zid) {
+      return zid.cart
+        .buyNow(payloadFor(button, productId, quantity), { showErrorNotification: true })
+        .then(function (added) {
+          return !!added;
+        });
+    });
+  }
+
   function cartUrl(query) {
     return (document.body.getAttribute("data-cart-url") || "/cart") + (query || "");
   }
@@ -183,6 +188,7 @@
     waitForZid: waitForZid,
     toast: toast,
     addToCart: addToCart,
+    donateNow: donateNow,
     refreshCartBadge: refreshCartBadge,
     toEnglishDigits: toEnglishDigits,
   };
@@ -206,27 +212,7 @@
         })
       ).catch(function () {});
     } else if (now) {
-      // The cart keeps only this donation. With store.settings.checkout.show_checkout_as_popup
-      // on, buyNow does that and opens Vitrin's login or checkout dialog. With it off, buyNow
-      // would still open the login dialog for a guest (when the login popup is on) and leave them
-      // on this page after login, so the cart is set here and the donor goes to the checkout page.
-      var nowProductId = button.getAttribute("data-donation-now");
-      withSpinner(
-        button,
-        waitForZid().then(function (zid) {
-          if (checkoutAsPopup()) {
-            return zid.cart
-              .buyNow(payloadFor(button, nowProductId, quantity), { showErrorNotification: true })
-              .then(function (added) {
-                // The dialog did not mount: fall back to the checkout page.
-                if (added && !window.checkout_dialog && !window.checkoutDialogOpenBuyNow) goToCheckout();
-              });
-          }
-          return keepOnlyDonation(zid, nowProductId, quantity, button).then(function (saved) {
-            if (saved) goToCheckout();
-          });
-        })
-      ).catch(function () {});
+      withSpinner(button, donateNow(button.getAttribute("data-donation-now"), quantity, button)).catch(function () {});
     } else if (gift) {
       // A donation gift covers one project, as in the old storefront: the cart keeps only this
       // donation, then Vitrin's gift dialog on the cart page collects the details.
