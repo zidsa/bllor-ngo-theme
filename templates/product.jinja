@@ -79,6 +79,9 @@
                         <input type="hidden" id="product-id" name="product_id" value="{{ safeget(product, 'selected_product.id') or product.id }}">
                         <div class="block-product custom-res-bottom">
                             <span class="label data-donation-remaining-amount-exceed-message"></span>
+                            {% with licence_view = 'details' %}
+                                {% include 'components/products/ncnp-licence.jinja' %}
+                            {% endwith %}
                             {% if is_complete %}
                                 <p class="text-center text-ended">{{ _('This opportunity has ended') }}</p>
                             {% else %}
