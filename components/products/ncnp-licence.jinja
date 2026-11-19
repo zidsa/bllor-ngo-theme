@@ -6,7 +6,6 @@
   The licence comes from extension-backend's NCNP integration, in the product meta:
   - `ncnp_licence_number`: set only when the product is linked to an NCNP program.
   - `ncnp_end_date`: last collecting day, "YYYY-MM-DD" (Riyadh calendar day).
-  - `ncnp_program_name`, `ncnp_verification_url`: shown when the payload has them.
 
   The backend refuses to publish, and hourly hides, products whose licence is not
   active, so a visible linked product has a valid licence. Pages may be cached, so
@@ -18,8 +17,6 @@
 {% set ncnp_is_donation = product.product_class in ['crowdfunding_project', 'donation_item'] %}
 {% if ncnp_is_donation and ncnp_number %}
     {% set ncnp_end = ncnp_meta.ncnp_end_date or '' %}
-    {% set ncnp_program = ncnp_meta.ncnp_program_name %}
-    {% set ncnp_url = ncnp_meta.ncnp_verification_url %}
 
     {# Verified seal, inline so it needs no asset and has no background. On the card it
        sits after the product name with a tooltip (hover, focus or tap) set up by js.js;
@@ -35,12 +32,6 @@
                     <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
                 </summary>
                 <dl class="ncnp-licence-body">
-                    {% if ncnp_program %}
-                        <div class="ncnp-licence-row">
-                            <dt>{{ _('Program name') }}</dt>
-                            <dd>{{ ncnp_program | e }}</dd>
-                        </div>
-                    {% endif %}
                     <div class="ncnp-licence-row">
                         <dt>{{ _('Licence number') }}</dt>
                         <dd dir="ltr">{{ ncnp_number | e }}</dd>
@@ -55,12 +46,6 @@
                 <div class="ncnp-licence-issuer">
                     <p class="ncnp-licence-issuer-name">{{ _('National Center for Non-Profit Sector') }}</p>
                     <img class="ncnp-licence-logo" src="{{ 'ncnp-logo.png' | asset_url }}" alt="{{ _('National Center for Non-Profit Sector') }}" width="400" height="178" loading="lazy">
-                    {% if ncnp_url %}
-                        <a class="ncnp-licence-link" href="{{ ncnp_url | e }}" target="_blank" rel="noopener noreferrer">
-                            {{ _('Licence link') }}
-                            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
-                        </a>
-                    {% endif %}
                 </div>
             </details>
         </div>

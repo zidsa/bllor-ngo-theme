@@ -290,9 +290,6 @@ msgstr "ترخيص جمع التبرعات ساري"
 msgid "Licence details"
 msgstr "تفاصيل الترخيص"
 
-msgid "Program name"
-msgstr "اسم البرنامج"
-
 msgid "Licence number"
 msgstr "رقم الترخيص"
 
@@ -301,6 +298,3 @@ msgstr "ساري حتى"
 
 msgid "National Center for Non-Profit Sector"
 msgstr "المركز الوطني لتنمية القطاع غير الربحي"
-
-msgid "Licence link"
-msgstr "رابط الترخيص"

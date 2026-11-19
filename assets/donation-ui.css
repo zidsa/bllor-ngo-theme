@@ -719,7 +719,7 @@
   text-align: end;
   overflow-wrap: anywhere;
 }
-/* Issuer under "Valid until": the NCNP name, its logo, and the licence link. */
+/* Issuer under "Valid until": the NCNP name and its logo. */
 .ncnp-licence-issuer {
   display: flex;
   flex-direction: column;
@@ -740,17 +740,6 @@
   width: 150px;
   max-width: 100%;
   height: auto;
-}
-.ncnp-licence-issuer .ncnp-licence-link:link,
-.ncnp-licence-issuer .ncnp-licence-link:visited {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--ncnp-green);
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 @media (max-width: 575.98px) {
   .ncnp-licence-row {
