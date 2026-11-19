@@ -283,3 +283,18 @@ msgstr "من أصل %s"
 
 msgid "Other amount"
 msgstr "مبلغ آخر"
+
+msgid "Valid fundraising licence"
+msgstr "ترخيص جمع التبرعات ساري"
+
+msgid "Licence details"
+msgstr "تفاصيل الترخيص"
+
+msgid "Licence number"
+msgstr "رقم الترخيص"
+
+msgid "Valid until"
+msgstr "ساري حتى"
+
+msgid "National Center for Non-Profit Sector"
+msgstr "المركز الوطني لتنمية القطاع غير الربحي"

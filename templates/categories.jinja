@@ -49,6 +49,7 @@
                     block.querySelector("[data-category-cards]").appendChild(row);
                     block.classList.remove("d-none");
                     if (window.bllorInitDonationWindows) window.bllorInitDonationWindows(block);
+                    if (window.bllorInitLicences) window.bllorInitLicences(block);
                 })
                 .catch(function () {});
         });

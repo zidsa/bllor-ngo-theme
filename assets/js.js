@@ -39,9 +39,96 @@
     }
 
     initDonationWindows(document);
+    initLicences(document);
   });
 
   window.bllorInitDonationWindows = initDonationWindows;
+  window.bllorInitLicences = initLicences;
+
+  /*
+   * NCNP licence status. The backend hides products whose licence lapsed, but cached
+   * pages can outlive the end date, so a status past its end date is removed here.
+   * The end date is a Riyadh calendar day ("YYYY-MM-DD"), compared as a string.
+   */
+  function riyadhToday() {
+    try {
+      return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Riyadh" });
+    } catch (e) {
+      return new Date().toISOString().slice(0, 10);
+    }
+  }
+
+  /*
+   * Licence tooltip: hover or keyboard focus shows it, a tap/click pins it open, a tap
+   * elsewhere or Escape closes it. Delegated, so cards loaded later need no setup.
+   */
+  function licenceTooltip(button) {
+    if (!window.bootstrap) return null;
+    return bootstrap.Tooltip.getOrCreateInstance(button, {
+      title: button.getAttribute("data-ncnp-title") || "",
+      trigger: "manual",
+      placement: "bottom",
+      container: "body",
+      customClass: "ncnp-tooltip",
+    });
+  }
+
+  // Show once: a tap fires mouseenter, focus and click, and repeated show() calls
+  // make Bootstrap rebuild the tooltip and drop it.
+  function showLicenceTooltip(button) {
+    if (button.hasAttribute("data-open")) return;
+    var tip = licenceTooltip(button);
+    if (!tip) return;
+    button.setAttribute("data-open", "");
+    tip.show();
+  }
+
+  function hideLicenceTooltip(button) {
+    button.removeAttribute("data-open");
+    button.removeAttribute("data-pinned");
+    var tip = window.bootstrap && bootstrap.Tooltip.getInstance(button);
+    if (tip) tip.hide();
+  }
+
+  function hideLicenceTooltips(except) {
+    $("[data-ncnp-tooltip][data-open]").each(function () {
+      if (this !== except) hideLicenceTooltip(this);
+    });
+  }
+
+  $(document)
+    .on("mouseenter focus", "[data-ncnp-tooltip]", function () {
+      showLicenceTooltip(this);
+    })
+    .on("mouseleave blur", "[data-ncnp-tooltip]", function () {
+      if (!this.hasAttribute("data-pinned")) hideLicenceTooltip(this);
+    })
+    .on("click", "[data-ncnp-tooltip]", function (e) {
+      e.preventDefault();
+      // The first tap pins it open (hover already showed it on desktop); the next closes it.
+      if (this.hasAttribute("data-pinned")) {
+        hideLicenceTooltip(this);
+      } else {
+        hideLicenceTooltips(this);
+        this.setAttribute("data-pinned", "");
+        showLicenceTooltip(this);
+      }
+    })
+    .on("click", function (e) {
+      // Both handlers sit on document, so the label's own click must be skipped here.
+      if (!$(e.target).closest(".ncnp-tooltip, [data-ncnp-tooltip]").length) hideLicenceTooltips();
+    })
+    .on("keydown", function (e) {
+      if (e.key === "Escape") hideLicenceTooltips();
+    });
+
+  function initLicences(root) {
+    var today = riyadhToday();
+    $(root || document).find("[data-ncnp-licence]").each(function () {
+      var end = String($(this).attr("data-end") || "").slice(0, 10);
+      if (/^\d{4}-\d{2}-\d{2}$/.test(end) && today > end) $(this).remove();
+    });
+  }
 
   $(document).on("mouseup", function (e) {
     var form = $(".block-search-form");
