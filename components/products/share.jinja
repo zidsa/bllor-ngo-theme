@@ -1,4 +1,4 @@
-{# Expects `share_url` and `share_name`. `share_variant` adds the selected variant to the shared link. #}
+{# Expects `share_url` and `share_name`. #}
 <div class="dropup-center dropup floating-action-button"{% if share_variant %} data-product-share="{{ share_url }}"{% endif %}>
     <button type="button" class="btn btn-link dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="{{ _('Share') }}">
         <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ _('Share') }}"><i class="icon-svg icon-share"></i></span>

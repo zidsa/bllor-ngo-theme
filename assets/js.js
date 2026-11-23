@@ -32,6 +32,21 @@
       $(".block-search-form").addClass("active");
     });
 
+    $("[data-product-share] a").each(function () {
+      var link = $(this);
+      var productUrl = link.closest("[data-product-share]").attr("data-product-share");
+      var share = new URL(link.attr("href"));
+      var text = share.searchParams.get("text");
+
+      link.on("pointerdown click", function () {
+        var shared = text.replace(productUrl, function () {
+          return productShareUrl(productUrl);
+        });
+        share.search = "?text=" + encodeURIComponent(shared);
+        link.attr("href", share.href);
+      });
+    });
+
     if (window.bootstrap) {
       document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
         new bootstrap.Tooltip(el);
@@ -94,7 +109,7 @@
 
   function productShareUrl(productUrl) {
     var variantId = new URLSearchParams(window.location.search).get("pid");
-    if (!variantId) return productUrl;
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(variantId)) return productUrl;
 
     var url = new URL(productUrl, window.location.href);
     url.searchParams.set("pid", variantId);
@@ -105,18 +120,6 @@
     var url = $(this).attr("data-copy-url");
     navigator.clipboard.writeText($(this).closest("[data-product-share]").length ? productShareUrl(url) : url);
     if (window.bllorCart) window.bllorCart.toast(t("copied"));
-  });
-
-  $("[data-product-share] a").each(function () {
-    var link = $(this);
-    var productUrl = link.closest("[data-product-share]").attr("data-product-share");
-    var share = new URL(link.attr("href"));
-    var text = share.searchParams.get("text");
-
-    link.on("click", function () {
-      share.search = "?text=" + encodeURIComponent(text.replace(productUrl, productShareUrl(productUrl)));
-      link.attr("href", share.href);
-    });
   });
 
   /*
