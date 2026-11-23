@@ -32,6 +32,14 @@
       $(".block-search-form").addClass("active");
     });
 
+    if (window.bootstrap) {
+      document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+        new bootstrap.Tooltip(el);
+      });
+    }
+
+    initDonationWindows(document);
+
     $("[data-product-share] a").each(function () {
       var link = $(this);
       var productUrl = link.closest("[data-product-share]").attr("data-product-share");
@@ -46,14 +54,6 @@
         link.attr("href", share.href);
       });
     });
-
-    if (window.bootstrap) {
-      document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
-        new bootstrap.Tooltip(el);
-      });
-    }
-
-    initDonationWindows(document);
   });
 
   window.bllorInitDonationWindows = initDonationWindows;
