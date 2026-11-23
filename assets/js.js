@@ -92,9 +92,31 @@
       });
   });
 
+  function productShareUrl(productUrl) {
+    var variantId = new URLSearchParams(window.location.search).get("pid");
+    if (!variantId) return productUrl;
+
+    var url = new URL(productUrl, window.location.href);
+    url.searchParams.set("pid", variantId);
+    return url.href;
+  }
+
   $(document).on("click", "[data-copy-url]", function () {
-    navigator.clipboard.writeText($(this).attr("data-copy-url"));
+    var url = $(this).attr("data-copy-url");
+    navigator.clipboard.writeText($(this).closest("[data-product-share]").length ? productShareUrl(url) : url);
     if (window.bllorCart) window.bllorCart.toast(t("copied"));
+  });
+
+  $("[data-product-share] a").each(function () {
+    var link = $(this);
+    var productUrl = link.closest("[data-product-share]").attr("data-product-share");
+    var share = new URL(link.attr("href"));
+    var text = share.searchParams.get("text");
+
+    link.on("click", function () {
+      share.search = "?text=" + encodeURIComponent(text.replace(productUrl, productShareUrl(productUrl)));
+      link.attr("href", share.href);
+    });
   });
 
   /*
