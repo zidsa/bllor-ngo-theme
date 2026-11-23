@@ -23,7 +23,7 @@
                 </ul>
             </li>
         {% else %}
-            <li><a href="{{ link(menu) }}">{{ menu.label | e }}</a></li>
+            <li><a href="{{ link(menu) }}">{{ _("All donation opportunities") if menu.url == '/products/' else menu.label | e }}</a></li>
         {% endif %}
     {% endfor %}
 </ul>
