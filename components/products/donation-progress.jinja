@@ -5,7 +5,7 @@
 {% set is_project = product.product_class == 'crowdfunding_project' %}
 {% set pct = meta.project_progress_percentage if is_project else meta.progress_percentage %}
 {% set show_figures = (meta.show_collected_amount if is_project else meta.show_purchased_units) and not meta.is_open_donation %}
-{% set show_bar = meta.show_progress_bar and pct is not none and meta.is_open_donation %}
+{% set show_bar = meta.show_progress_bar and pct is not none and not meta.is_open_donation %}
 {% set show_pct = show_bar and meta.show_progress_percentage %}
 {% set unit = product.currency_symbol if is_project else _('units') %}
 {% set collected = meta.project_collected_amount if is_project else meta.purchased_units %}
