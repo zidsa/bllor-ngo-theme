@@ -125,7 +125,7 @@
                                         {% if gift_enabled %}
                                             <button class="btn btn-link" type="button" data-donation-gift="{{ product.id }}" data-form="product-form" data-input="#{{ input_id }}" aria-label="{{ _('Gift the donation') }}" title="{{ _('Gift the donation') }}"><i class="icon-svg icon-gift"></i></button>
                                         {% endif %}
-                                        {% with share_url = url_for('product_details', slug=product.slug), share_name = product.name %}
+                                        {% with share_url = url_for('product_details', slug=product.slug), share_name = product.name, share_variant = true %}
                                             {% include 'components/products/share.jinja' %}
                                         {% endwith %}
                                     </div>
