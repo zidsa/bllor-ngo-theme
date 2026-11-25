@@ -591,3 +591,162 @@
     display: flex !important;
   }
 }
+
+/* NCNP fundraising licence: a verified seal after the product name (card and product
+   page) with a tooltip, and the status plus licence details next to the donation controls.
+   Green is the "verified" signal and stays fixed. */
+.ncnp-licence {
+  --ncnp-green: #2f8a57;
+  --ncnp-green-bg: #eef7f1;
+  --ncnp-green-border: #c6e3d1;
+}
+/* The seal sits right after the name, with space between them. */
+.ncnp-licence-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  margin-inline-start: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  /* No background or button chrome: only the seal shows, on the image too. */
+  background: transparent !important;
+  box-shadow: none !important;
+  -webkit-appearance: none;
+  appearance: none;
+  color: var(--ncnp-green);
+  line-height: 0;
+  cursor: pointer;
+  /* The card title overlay sets pointer-events:none; the seal must still get hover/tap. */
+  pointer-events: auto;
+}
+.ncnp-licence-icon:focus-visible {
+  outline: 2px solid currentColor !important;
+  outline-offset: 2px;
+}
+.ncnp-licence-seal {
+  display: block;
+  color: inherit;
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+.norma-product .donation-card-title .ncnp-licence-seal {
+  width: 20px;
+  height: 20px;
+}
+
+/* Tooltip (mounted on <body> by Bootstrap), dark like the Figma design. */
+.ncnp-tooltip {
+  --bs-tooltip-bg: #545454;
+  --bs-tooltip-color: #fff;
+  --bs-tooltip-opacity: 1;
+  --bs-tooltip-padding-x: 12px;
+  --bs-tooltip-padding-y: 6px;
+  --bs-tooltip-border-radius: 6px;
+  --bs-tooltip-font-size: 13px;
+  font-family: inherit;
+}
+
+/* Product page */
+.ncnp-licence-details {
+  margin-bottom: 16px;
+  border: 1px solid var(--ncnp-green-border);
+  border-radius: 10px;
+  background: var(--ncnp-green-bg);
+  color: var(--ncnp-green);
+}
+.ncnp-licence-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 14px 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+.ncnp-licence-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 8px 14px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.ncnp-licence-summary::-webkit-details-marker {
+  display: none;
+}
+.ncnp-licence-summary:focus-visible {
+  outline: 2px solid var(--ncnp-green) !important;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.ncnp-licence-summary i {
+  font-size: 11px;
+  transition: transform 0.2s ease;
+}
+.ncnp-licence-more[open] .ncnp-licence-summary i {
+  transform: rotate(180deg);
+}
+.ncnp-licence-body {
+  margin: 0;
+  padding: 0 14px 4px;
+  border-top: 1px solid var(--ncnp-green-border);
+  color: #2b2b2b;
+  font-size: 14px;
+}
+.ncnp-licence-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+}
+.ncnp-licence-row + .ncnp-licence-row {
+  border-top: 1px dashed var(--ncnp-green-border);
+}
+.ncnp-licence-row dt {
+  font-weight: 400;
+  color: #6b6b6b;
+}
+.ncnp-licence-row dd {
+  margin: 0;
+  font-weight: 700;
+  text-align: end;
+  overflow-wrap: anywhere;
+}
+/* Issuer under "Valid until": the NCNP name and its logo. */
+.ncnp-licence-issuer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 14px;
+  padding: 12px 0 14px;
+  border-top: 1px solid var(--ncnp-green-border);
+  color: #2b2b2b;
+}
+.ncnp-licence-issuer-name {
+  margin: 0;
+  font-size: 14px;
+  color: #6b6b6b;
+}
+.ncnp-licence-logo {
+  display: block;
+  width: 150px;
+  max-width: 100%;
+  height: auto;
+}
+@media (max-width: 575.98px) {
+  .ncnp-licence-row {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .ncnp-licence-row dd {
+    text-align: start;
+  }
+}

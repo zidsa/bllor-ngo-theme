@@ -32,7 +32,7 @@
         </a>
         {# Keeps bllor's content-thumb > h3 so migrated custom CSS still matches the title. #}
         <div class="content-thumb donation-card-title">
-            <h3><a href="{{ product_url }}">{{ product.name | e }}</a></h3>
+            <h3><a href="{{ product_url }}">{{ product.name | e }}</a>{% with licence_view = 'icon' %}{% include 'components/products/ncnp-licence.jinja' %}{% endwith %}</h3>
         </div>
 
         {% if is_project or is_item %}
